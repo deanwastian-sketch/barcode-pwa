@@ -1,4 +1,7 @@
 let scanning = false;
+let scannedArticles = [];
+let userAnswers = [];
+let currentBarcode = "";
 
 function startScanner() {
     if(scanning) return;
@@ -26,6 +29,12 @@ function startScanner() {
 
     Quagga.onDetected(function(result){
         const code = result.codeResult.code;
+        if(scannedArticles.includes(code)){
+            playBeepError();
+            alert("Artikel je že bil poskeniran!");
+            return;
+        }
+        currentBarcode = code;
         Quagga.stop();
         scanning=false;
         playBeep();
@@ -43,6 +52,16 @@ function playBeep(){
     oscillator.stop(audioCtx.currentTime + 0.15);
 }
 
+function playBeepError(){
+    const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    oscillator.type = "square";
+    oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+    oscillator.connect(audioCtx.destination);
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.3);
+}
+
 function showProductInfo(barcode){
     const product = products[barcode];
     if(!product){ 
@@ -50,11 +69,55 @@ function showProductInfo(barcode){
         return; 
     }
 
-    // Skrij vse video elemente, da črn kvadrat ne blokira info
     const videos = document.querySelectorAll("#scanner video");
     videos.forEach(v => v.style.display = "none");
 
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
     document.getElementById("productInfo").style.display = "block";
+    document.getElementById("answerSection").style.display = "block";
+
+    scannedArticles.push(barcode);
+    updateProgress();
+}
+
+function saveAnswer(){
+    const answer = document.getElementById("userAnswer").value.trim();
+    if(!answer){
+        alert("Vnesi odgovor!");
+        return;
+    }
+
+    userAnswers.push({barcode: currentBarcode, answer: answer});
+    document.getElementById("userAnswer").value = "";
+    document.getElementById("productInfo").style.display = "none";
+    document.getElementById("answerSection").style.display = "none";
+
+    if(scannedArticles.length < Object.keys(products).length){
+        startScanner(); // odpri naslednji artikel
+    } else {
+        showResults();
+    }
+}
+
+function updateProgress(){
+    const progress = (scannedArticles.length / Object.keys(products).length) * 100;
+    document.getElementById("progressBar").style.width = progress + "%";
+}
+
+function showResults(){
+    const tbody = document.querySelector("#resultsTable tbody");
+    tbody.innerHTML = "";
+    userAnswers.forEach(item => {
+        const product = products[item.barcode];
+        const tr = document.createElement("tr");
+        const tdName = document.createElement("td");
+        tdName.innerText = product.name;
+        const tdAnswer = document.createElement("td");
+        tdAnswer.innerText = item.answer;
+        tr.appendChild(tdName);
+        tr.appendChild(tdAnswer);
+        tbody.appendChild(tr);
+    });
+    document.getElementById("resultsTable").style.display = "table";
 }
