@@ -8,7 +8,7 @@ const products = {
         lastOrder: "12.4.2026",
         hint: "Nepogrešljivo ob kavi"
     },
-    "9876543210987": {
+    "3831093320914": {
         name: "Svinčnik HB",
         desc: "Leseni, standardni",
         warehouse: "Maribor",
@@ -17,7 +17,7 @@ const products = {
         hint: "Idealno za pisanje na papir."
     },
     // primer dodajanja novega artikla
-    "5556667778889": {
+    "9002843059369": {
         name: "Rdeča barva",
         desc: "Akrilna, 250ml",
         warehouse: "Celje",
@@ -25,7 +25,7 @@ const products = {
         lastOrder: "2026-04-10",
         hint: "Primerno za umetniške projekte."
     },
-    "5556667778889": {
+    "4334036092804": {
         name: "Rdeča barva",
         desc: "Akrilna, 250ml",
         warehouse: "Celje",
