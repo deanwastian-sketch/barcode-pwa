@@ -5,51 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kviz Skeniranja Artiklov</title>
 <style>
-body { font-family: Arial, sans-serif; padding: 20px; font-size: 18px; }
-h2 { font-size: 28px; }
-#instructions { font-size: 20px; margin-bottom: 10px; }
-#progress { font-size: 18px; margin-bottom: 10px; }
-
+body { font-family: Arial, sans-serif; padding: 10px; }
+h2 { font-size: 24px; }
 #scanner {
     width: 100%;
-    height: 300px;
+    height: 300px;       /* fiksna višina */
     background: #000;
-    margin-bottom: 20px;
-    visibility: hidden; /* skrit, a renderiran */
-    pointer-events: none;
+    margin-top: 10px;
 }
-
-#productInfo { display: none; margin-bottom: 20px; font-size: 18px; }
+button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer; }
+#productInfo { display: none; margin-top: 10px; }
 #productInfo p { margin: 5px 0; }
-
-#answerSection { display: none; margin-bottom: 20px; }
-#answerSection input[type=text] { padding: 10px; width: 60%; font-size: 18px; }
-#answerSection button { padding: 10px 20px; font-size: 18px; }
-
-button { padding: 12px 20px; font-size: 18px; cursor: pointer; }
-
-#resultsSection { display: none; margin-top: 20px; }
-#resultsTable { width: 100%; border-collapse: collapse; font-size: 18px; }
-#resultsTable th, #resultsTable td { border: 1px solid #333; padding: 10px; text-align: left; }
-
-#hintModal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
-#hintModal.show { display: flex; }
-#hintModalContent { background: #fff; padding: 20px; border-radius: 8px; max-width: 400px; font-size: 18px; }
-.closeBtn { cursor: pointer; float: right; font-weight: bold; }
-
-#progressContainer { width: 100%; background-color: #ddd; border-radius: 8px; overflow: hidden; height: 25px; margin-bottom: 20px; }
-#progressBar { width: 0%; height: 100%; background-color: #4CAF50; text-align: center; color: white; line-height: 25px; font-weight: bold; transition: width 0.3s ease; }
 </style>
 </head>
 <body>
 
 <h2>Kviz Skeniranja Artiklov</h2>
-<p id="instructions">Kliknite gumb za začetek skeniranja artiklov.</p>
-
-<div id="progressContainer">
-    <div id="progressBar">0%</div>
-</div>
-<p id="progress">Artikel 0 / 4</p>
 
 <button onclick="startScanner()">Zaženi kamero</button>
 <div id="scanner"></div>
@@ -57,36 +28,11 @@ button { padding: 12px 20px; font-size: 18px; cursor: pointer; }
 <div id="productInfo">
     <p><strong>Naziv:</strong> <span id="productName"></span></p>
     <p><strong>Opis:</strong> <span id="productDesc"></span></p>
-    <p><strong>Skladišče:</strong> <span id="productWarehouse"></span></p>
-    <p><strong>Zaloga:</strong> <span id="productStock"></span></p>
-    <p><strong>Zadnje naročilo:</strong> <span id="productLastOrder"></span></p>
-    <button onclick="showHint()">Namig ?</button>
-</div>
-
-<div id="answerSection">
-    <input type="text" id="userAnswer" placeholder="Vnesite svoj odgovor">
-    <button onclick="submitAnswer()">Shrani</button>
-</div>
-
-<div id="resultsSection">
-    <h3>Rezultati</h3>
-    <table id="resultsTable">
-        <thead>
-            <tr><th>Artikel</th><th>Odgovor</th></tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
-
-<div id="hintModal">
-    <div id="hintModalContent">
-        <span class="closeBtn" onclick="closeHint()">&times;</span>
-        <p id="modalHintText"></p>
-    </div>
 </div>
 
 <script src="quagga.min.js"></script>
 <script src="products.js"></script>
 <script src="app.js"></script>
+
 </body>
 </html>
