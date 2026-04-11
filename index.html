@@ -1,30 +1,17 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-  <meta charset="UTF-8">
-  <title>Barcode PWA</title>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="manifest.json">
-
-  <style>
-    body { font-family: sans-serif; text-align: center; }
-    #scanner { width: 100%; max-width: 400px; height: 250px; margin: auto; }
-    input, button { font-size: 18px; padding: 10px; margin-top: 10px; width: 80%; }
-  </style>
-</head>
-<body>
-
-<h3>Poskeniraj črtno kodo</h3>
-
-<input type="text" id="barcodeInput" placeholder="Rezultat">
-
+<input type="text" id="barcodeInput" placeholder="Številka črtne kode">
 <button onclick="startScanner()">Zaženi kamero</button>
+<div id="scanner" style="width:100%;height:300px;margin-top:10px;"></div>
 
-<div id="scanner"></div>
-
-<script src="quagga.min.js"></script>
-<script src="app.js"></script>
-
-</body>
-</html>
+<!-- Container za podatke po skeniranju -->
+<div id="productInfo" style="margin-top:20px; display:none; border:1px solid #ccc; padding:10px; border-radius:5px;">
+    <h3 id="productName"></h3>
+    <p id="productDesc"></p>
+    <p><strong>Skladišče:</strong> <span id="productWarehouse"></span></p>
+    <p><strong>Zaloga:</strong> <span id="productStock"></span></p>
+    <p><strong>Zadnje naročilo:</strong> <span id="productLastOrder"></span></p>
+    <p>
+        <strong>Namig:</strong> 
+        <span id="productHint"></span>
+        <button id="hintBtn" onclick="showHint()" style="margin-left:5px;">❓</button>
+    </p>
+</div>
