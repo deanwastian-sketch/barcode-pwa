@@ -4,7 +4,7 @@ const products = {
         name: "ARTIKEL 1",
         desc: "Ta izdelek se uporablja dnevno. Večkrat dnevno. Primeren tako za redne kot izredne situacije. Je reden spremljevalec na vseh tvojih poteh. Na letnem povprečju njegova vrednost lahko naraste do vrednosti potovanja za 2 osebi v južne kraje.",
         warehouse: "Kjerkoli",
-        stock: 1-2,
+        stock: "1-2",
         lastOrder: "12.4.2026",
         hint: "Nepogrešljivo ob kavi"
     },
