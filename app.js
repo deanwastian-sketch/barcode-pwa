@@ -1,9 +1,10 @@
 let scanning = false;
 let scannedArticles = [];
+let scannedBarcodes = []; // shrani barcodes že poskeniranih artiklov
 let userAnswers = [];
 let currentBarcode = null;
 
-const TOTAL_ARTICLES = 4; // testiramo 4 artikle
+const TOTAL_ARTICLES = 4; // testiranje 4 artiklov
 
 function startScanner() {
     if (scanning) return;
@@ -60,12 +61,20 @@ function showProductInfo(barcode) {
 
     if (!product) {
         alert("Artikel ni najden v bazi. Poskusite znova.");
-        // kamera ostane pripravljena za nov sken
         startScanner();
         return;
     }
 
-    currentBarcode = barcode; // shranimo trenutni artikel
+    // Preverimo, če je artikel že skeniran
+    if (scannedBarcodes.includes(barcode)) {
+        alert("Ta artikel je že bil poskeniran. Poskusite drugega.");
+        startScanner();
+        return;
+    }
+
+    currentBarcode = barcode; 
+    scannedBarcodes.push(barcode); // zabeležimo barcode
+
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
     document.getElementById("productWarehouse").innerText = product.warehouse;
@@ -89,7 +98,6 @@ function submitAnswer() {
         return;
     }
 
-    // Shrani samo če je artikel v bazi
     const product = products[currentBarcode];
     if (!product) return;
 
