@@ -20,11 +20,16 @@ function startScanner() {
     scanning = true;
 
     const scannerDiv = document.getElementById("scanner");
-    scannerDiv.style.opacity = 1; // zdaj vidno
+    scannerDiv.style.visibility = "visible";
+    scannerDiv.style.pointerEvents = "auto";
 
     Quagga.offDetected();
     Quagga.init({
-        inputStream: { type: "LiveStream", target: scannerDiv, constraints: { facingMode: "environment" } },
+        inputStream: {
+            type: "LiveStream",
+            target: scannerDiv,
+            constraints: { facingMode: "environment" }
+        },
         decoder: { readers: ["ean_reader","code_128_reader"] }
     }, function(err){
         if(err){ console.error(err); alert("Napaka pri dostopu do kamere"); scanning=false; return; }
@@ -41,7 +46,8 @@ function startScanner() {
         currentBarcode = code;
         Quagga.stop();
         scanning=false;
-        scannerDiv.style.opacity=0; // skrije video
+        scannerDiv.style.visibility = "hidden";
+        scannerDiv.style.pointerEvents = "none";
         showProductInfo(code);
     });
 }
@@ -108,6 +114,4 @@ function showResults(){
 }
 
 function showHint(){
-    const hint = document.getElementById("productInfo").dataset.hint;
-    document.getElementById("modalHintText").innerText = hint;
-    document.getElementById("
+    const hint = document.getElementById("productInfo").dataset
