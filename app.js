@@ -6,6 +6,7 @@ let currentBarcode = null;
 
 const TOTAL_ARTICLES = 4;
 
+// posodobi števec
 function updateProgress() {
     document.getElementById("progress").innerText = `Artikel ${scannedArticles.length + 1} / ${TOTAL_ARTICLES}`;
 }
@@ -20,8 +21,15 @@ function startScanner() {
     scannerDiv.innerHTML = "";
     scannerDiv.style.display = "block";
 
+    // unbind prejšnji handler
+    Quagga.offDetected();
+
     Quagga.init({
-        inputStream: { type: "LiveStream", target: scannerDiv, constraints: { facingMode: "environment" } },
+        inputStream: {
+            type: "LiveStream",
+            target: scannerDiv,
+            constraints: { facingMode: "environment" }
+        },
         decoder: { readers: ["ean_reader", "code_128_reader"] }
     }, function(err) {
         if (err) {
@@ -37,18 +45,15 @@ function startScanner() {
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
 
-        // Preverimo, če je artikel že skeniran
+        // preveri, ali je artikel že skeniran
         if (scannedBarcodes.includes(code)) {
             alert("Ta artikel je že bil poskeniran. Poskusite drugega.");
-            Quagga.stop();
-            scanning = false;
-            startScanner(); // ponovno zaženi kamero
-            return;
+            return; // kamera ostane aktivna, uporabnik lahko poskusi drug barcode
         }
 
+        currentBarcode = code;
         Quagga.stop();
         scanning = false;
-        scannerDiv.innerHTML = "";
         scannerDiv.style.display = "none";
 
         showProductInfo(code);
@@ -65,22 +70,19 @@ function playBeep() {
     oscillator.stop(audioCtx.currentTime + 0.1);
 }
 
+// prikaži podatke o artiklu
 function showProductInfo(barcode) {
     const product = products[barcode];
     if (!product) {
         alert("Artikel ni najden v bazi. Poskusite znova.");
-        startScanner();
-        return;
+        return startScanner();
     }
-
-    currentBarcode = barcode;
 
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
     document.getElementById("productWarehouse").innerText = product.warehouse;
     document.getElementById("productStock").innerText = product.stock;
     document.getElementById("productLastOrder").innerText = product.lastOrder;
-    document.getElementById("productHint").innerText = "";
     document.getElementById("productInfo").dataset.hint = product.hint;
     document.getElementById("productInfo").style.display = "block";
 
@@ -101,7 +103,7 @@ function submitAnswer() {
         return;
     }
 
-    // Shrani artikel in odgovor
+    // shrani barcode in odgovor
     scannedArticles.push(products[currentBarcode].name);
     scannedBarcodes.push(currentBarcode);
     userAnswers.push(answer);
@@ -112,7 +114,7 @@ function submitAnswer() {
     if (scannedArticles.length >= TOTAL_ARTICLES) {
         showResults();
     } else {
-        startScanner(); // zaženi naslednji sken
+        startScanner(); // naslednji sken
     }
 }
 
@@ -136,6 +138,7 @@ function showResults() {
     alert("Vsi odgovori so zabeleženi. Preverite rezultate spodaj.");
 }
 
+// modal za namig
 function showHint() {
     const hint = document.getElementById("productInfo").dataset.hint;
     if (!hint) return;
