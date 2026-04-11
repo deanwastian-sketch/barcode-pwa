@@ -9,40 +9,13 @@ body { font-family: Arial, sans-serif; padding: 10px; font-size: 18px; }
 h2 { font-size: 26px; }
 button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer; }
 
-#scanner {
-    width: 100%;
-    height: 300px;
-    background: #000;
-    margin-top: 10px;
-    position: relative;
-    z-index: 1;
-}
+#progressContainer { margin-top: 10px; background: #ccc; height: 25px; width: 100%; border-radius: 5px; }
+#progressBar { height: 100%; width: 0%; background: #4caf50; border-radius: 5px; }
 
-#progressContainer {
-    margin-top: 10px;
-    background: #ccc;
-    height: 25px;
-    width: 100%;
-    border-radius: 5px;
-}
-#progressBar {
-    height: 100%;
-    width: 0%;
-    background: #4caf50;
-    border-radius: 5px;
-}
-
-#productInfo { 
-    display: none; 
-    margin-top: 10px; 
-    font-size: 18px; 
-}
+#productInfo { display: none; margin-top: 10px; font-size: 18px; }
 #productInfo p { margin: 5px 0; }
 
-#answerSection {
-    display: none; 
-    margin-top: 10px;
-}
+#answerSection { display: none; margin-top: 10px; }
 #answerSection input { font-size: 18px; padding: 5px; width: 70%; }
 #answerSection button { margin-left: 10px; font-size: 18px; }
 
@@ -54,9 +27,7 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
 
 <h2>Kviz Skeniranja Artiklov</h2>
 <p>Klikni gumb, da zaženeš kamero in poskeniraš artikel.</p>
-<button id="startBtn" onclick="startScanner()">Zaženi kamero</button>
-
-<div id="scanner"></div>
+<button id="startBtn">Zaženi kamero</button>
 
 <div id="progressContainer">
     <div id="progressBar"></div>
@@ -69,7 +40,7 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
 
 <div id="answerSection">
     <input type="text" id="userAnswer" placeholder="Vnesi svoj odgovor">
-    <button onclick="saveAnswer()">Shrani</button>
+    <button id="saveBtn">Shrani</button>
 </div>
 
 <table id="resultsTable">
@@ -82,9 +53,7 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
     <tbody></tbody>
 </table>
 
-<script src="quagga.min.js"></script>
 <script src="products.js"></script>
 <script src="app.js"></script>
-
 </body>
 </html>
