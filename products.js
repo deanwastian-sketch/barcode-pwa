@@ -9,7 +9,7 @@ const products = {
         hint: "Nepogrešljivo ob kavi"
     },
     "3831093320914": {
-        name: "Svinčnik HB",
+        name: "Vinkl",
         desc: "Leseni, standardni",
         warehouse: "Maribor",
         stock: 100,
@@ -18,7 +18,7 @@ const products = {
     },
     // primer dodajanja novega artikla
     "9002843059369": {
-        name: "Rdeča barva",
+        name: "Ročaj",
         desc: "Akrilna, 250ml",
         warehouse: "Celje",
         stock: 35,
@@ -26,7 +26,7 @@ const products = {
         hint: "Primerno za umetniške projekte."
     },
     "4334036092804": {
-        name: "Rdeča barva",
+        name: "Sponke",
         desc: "Akrilna, 250ml",
         warehouse: "Celje",
         stock: 35,
