@@ -3,156 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Barcode Quiz PWA</title>
+<title>Kviz Skeniranja Artiklov</title>
+<link rel="stylesheet" href="style.css">
 <style>
-    body {
-        font-family: sans-serif;
-        margin: 0;
-        padding: 10px;
-        font-size: 16px;
-    }
-    input, button {
-        font-size: 18px;
-        padding: 8px;
-        margin-bottom: 10px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    #scanner {
-        width: 100%;
-        height: 300px;
-        background: #000;
-        margin-bottom: 10px;
-        position: relative;
-        display: none;
-    }
-    #productInfo {
-        margin-top: 20px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 5px;
-        display: none;
-        font-size: 16px;
-    }
-    #productInfo h3 {
-        margin: 0 0 5px 0;
-        font-size: 18px;
-    }
-    #productInfo p {
-        margin: 5px 0;
-    }
-    #answerSection {
-        display: none;
-        margin-top: 10px;
-    }
-    #resultsSection {
-        display: none;
-        margin-top: 20px;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        border: 1px solid #ccc;
-        padding: 5px;
-        text-align: left;
-    }
-    #hintBtn {
-        font-size: 16px;
-        padding: 2px 6px;
-        cursor: pointer;
-    }
-    /* Modal stil */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.5);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    .modal.show {
-        display: block;
-        opacity: 1;
-    }
-    .modal-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        border-radius: 10px;
-        width: 80%;
-        max-width: 400px;
-        text-align: center;
-        font-size: 16px;
-        transform: translateY(-20px);
-        transition: transform 0.3s ease;
-    }
-    .modal.show .modal-content {
-        transform: translateY(0);
-    }
-    .closeBtn {
-        color: #aaa;
-        float: right;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .closeBtn:hover {
-        color: #000;
-    }
+#scanner {
+    width: 100%;
+    height: 300px;
+    background: #000;
+    margin-bottom: 20px;
+}
+#productInfo {
+    display: none;
+    margin-bottom: 10px;
+}
+#answerSection {
+    display: none;
+}
+#resultsSection {
+    display: none;
+    margin-top: 20px;
+}
+#hintModal {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+#hintModal.show {
+    display: flex;
+}
+#hintModalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 300px;
+}
+.closeBtn {
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+}
 </style>
 </head>
 <body>
+
+<h2>Kviz Skeniranja Artiklov</h2>
+<p id="instructions">Poskenirajte artikel in vnesite svoj odgovor.</p>
+<p id="progress">Artikel 0 / 4</p>
 
 <button onclick="startScanner()">Zaženi kamero</button>
 <div id="scanner"></div>
 
 <div id="productInfo">
-    <h3 id="productName"></h3>
-    <p id="productDesc"></p>
+    <p><strong>Naziv:</strong> <span id="productName"></span></p>
+    <p><strong>Opis:</strong> <span id="productDesc"></span></p>
     <p><strong>Skladišče:</strong> <span id="productWarehouse"></span></p>
     <p><strong>Zaloga:</strong> <span id="productStock"></span></p>
     <p><strong>Zadnje naročilo:</strong> <span id="productLastOrder"></span></p>
-    <p>
-        <strong>Namig:</strong> 
-        <span id="productHint"></span>
-        <button id="hintBtn" onclick="showHint()">❓</button>
-    </p>
+    <button onclick="showHint()">?</button>
 </div>
 
 <div id="answerSection">
-    <input type="text" id="userAnswer" placeholder="Vpišite vaš odgovor">
+    <input type="text" id="userAnswer" placeholder="Vnesite svoj odgovor">
     <button onclick="submitAnswer()">Shrani</button>
 </div>
 
 <div id="resultsSection">
-    <h3>Pregled vaših odgovorov:</h3>
-    <table>
+    <h3>Rezultati</h3>
+    <table border="1">
         <thead>
-            <tr>
-                <th>Artikel</th>
-                <th>Vaš odgovor</th>
-            </tr>
+            <tr><th>Artikel</th><th>Odgovor</th></tr>
         </thead>
         <tbody id="resultsTable"></tbody>
     </table>
 </div>
 
 <!-- Modal za namig -->
-<div id="hintModal" class="modal">
-    <div class="modal-content">
+<div id="hintModal">
+    <div id="hintModalContent">
         <span class="closeBtn">&times;</span>
         <p id="modalHintText"></p>
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+<script src="quagga.min.js"></script>
 <script src="products.js"></script>
 <script src="app.js"></script>
 </body>
