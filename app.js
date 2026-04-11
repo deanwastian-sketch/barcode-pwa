@@ -1,25 +1,5 @@
 let scanning = false;
 
-// Demo baza izdelkov
-const products = {
-    "1234567890123": {
-        name: "Kreda Rumena",
-        desc: "Set 12 kosov",
-        warehouse: "Ljubljana",
-        stock: 20,
-        lastOrder: "2026-03-15",
-        hint: "Uporabite za tablo v učilnici."
-    },
-    "9876543210987": {
-        name: "Svinčnik HB",
-        desc: "Leseni, standardni",
-        warehouse: "Maribor",
-        stock: 100,
-        lastOrder: "2026-04-01",
-        hint: "Idealno za pisanje na papir."
-    }
-};
-
 function startScanner() {
     if (scanning) return;
     scanning = true;
@@ -51,7 +31,7 @@ function startScanner() {
         playBeep();
         Quagga.stop();
 
-        // Odstranimo video
+        // Odstranimo video (črn kvadrat)
         scannerDiv.innerHTML = "";
         scanning = false;
 
@@ -80,16 +60,15 @@ function showProductInfo(barcode) {
         document.getElementById("productWarehouse").innerText = product.warehouse;
         document.getElementById("productStock").innerText = product.stock;
         document.getElementById("productLastOrder").innerText = product.lastOrder;
-        document.getElementById("productHint").innerText = ""; // namig skrit
+        document.getElementById("productHint").innerText = ""; // skrit namig
         infoDiv.style.display = "block";
-        infoDiv.dataset.hint = product.hint; // shranimo namig v data-atribut
+        infoDiv.dataset.hint = product.hint; // shrani namig v data-atribut
     } else {
         infoDiv.style.display = "none";
         alert("Artikel ni najden v bazi.");
     }
 }
 
-// Prikaže namig ob kliku na vprašaj
 function showHint() {
     const infoDiv = document.getElementById("productInfo");
     const hint = infoDiv.dataset.hint;
