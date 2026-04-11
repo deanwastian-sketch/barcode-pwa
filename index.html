@@ -7,21 +7,22 @@
 <style>
 body { font-family: Arial, sans-serif; padding: 10px; }
 h2 { font-size: 24px; }
+button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer; }
+
 #scanner {
     width: 100%;
-    height: 300px;       /* fiksna višina */
+    height: 300px;
     background: #000;
     margin-top: 10px;
 }
-button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer; }
-#productInfo { display: none; margin-top: 10px; }
+
+#productInfo { display: none; margin-top: 10px; font-size: 18px; }
 #productInfo p { margin: 5px 0; }
 </style>
 </head>
 <body>
 
 <h2>Kviz Skeniranja Artiklov</h2>
-
 <button onclick="startScanner()">Zaženi kamero</button>
 <div id="scanner"></div>
 
