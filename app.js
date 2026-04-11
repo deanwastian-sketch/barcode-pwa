@@ -3,7 +3,7 @@ let scannedArticles = [];
 let userAnswers = [];
 let currentBarcode = null;
 
-const TOTAL_ARTICLES = 4; // zdaj testiramo samo 4 artikle
+const TOTAL_ARTICLES = 4; // testiramo 4 artikle
 
 function startScanner() {
     if (scanning) return;
@@ -35,12 +35,10 @@ function startScanner() {
         const code = result.codeResult.code;
         currentBarcode = code;
 
-        playBeep();
         Quagga.stop();
-
+        scanning = false;
         scannerDiv.innerHTML = "";
         scannerDiv.style.display = "none";
-        scanning = false;
 
         showProductInfo(code);
     });
@@ -60,26 +58,27 @@ function showProductInfo(barcode) {
     const infoDiv = document.getElementById("productInfo");
     const product = products[barcode];
 
-    if (product) {
-        scannedArticles.push(product.name);
-
-        document.getElementById("productName").innerText = product.name;
-        document.getElementById("productDesc").innerText = product.desc;
-        document.getElementById("productWarehouse").innerText = product.warehouse;
-        document.getElementById("productStock").innerText = product.stock;
-        document.getElementById("productLastOrder").innerText = product.lastOrder;
-        document.getElementById("productHint").innerText = "";
-        infoDiv.style.display = "block";
-        infoDiv.dataset.hint = product.hint;
-
-        document.getElementById("answerSection").style.display = "block";
-        const answerInput = document.getElementById("userAnswer");
-        answerInput.value = "";
-        answerInput.focus();
-    } else {
-        infoDiv.style.display = "none";
-        alert("Artikel ni najden v bazi.");
+    if (!product) {
+        alert("Artikel ni najden v bazi. Poskusite znova.");
+        // kamera ostane pripravljena za nov sken
+        startScanner();
+        return;
     }
+
+    currentBarcode = barcode; // shranimo trenutni artikel
+    document.getElementById("productName").innerText = product.name;
+    document.getElementById("productDesc").innerText = product.desc;
+    document.getElementById("productWarehouse").innerText = product.warehouse;
+    document.getElementById("productStock").innerText = product.stock;
+    document.getElementById("productLastOrder").innerText = product.lastOrder;
+    document.getElementById("productHint").innerText = "";
+    infoDiv.dataset.hint = product.hint;
+    infoDiv.style.display = "block";
+
+    document.getElementById("answerSection").style.display = "block";
+    const answerInput = document.getElementById("userAnswer");
+    answerInput.value = "";
+    answerInput.focus();
 }
 
 function submitAnswer() {
@@ -90,6 +89,11 @@ function submitAnswer() {
         return;
     }
 
+    // Shrani samo če je artikel v bazi
+    const product = products[currentBarcode];
+    if (!product) return;
+
+    scannedArticles.push(product.name);
     userAnswers.push(answer);
 
     // skrijemo info in vnos
