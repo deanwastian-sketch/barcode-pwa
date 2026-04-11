@@ -1,9 +1,59 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barcode Scanner PWA</title>
+<style>
+    body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 10px;
+        font-size: 16px;
+    }
+    input, button {
+        font-size: 18px;
+        padding: 8px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    #scanner {
+        width: 100%;
+        height: 300px;
+        background: #000;
+        margin-bottom: 10px;
+        position: relative;
+    }
+    #productInfo {
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
+        font-size: 16px;
+    }
+    #productInfo h3 {
+        margin: 0 0 5px 0;
+        font-size: 18px;
+    }
+    #productInfo p {
+        margin: 5px 0;
+    }
+    #hintBtn {
+        font-size: 16px;
+        padding: 2px 6px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
 <input type="text" id="barcodeInput" placeholder="Številka črtne kode">
 <button onclick="startScanner()">Zaženi kamero</button>
-<div id="scanner" style="width:100%;height:300px;margin-top:10px;"></div>
+<div id="scanner"></div>
 
-<!-- Container za podatke po skeniranju -->
-<div id="productInfo" style="margin-top:20px; display:none; border:1px solid #ccc; padding:10px; border-radius:5px;">
+<div id="productInfo">
     <h3 id="productName"></h3>
     <p id="productDesc"></p>
     <p><strong>Skladišče:</strong> <span id="productWarehouse"></span></p>
@@ -12,6 +62,13 @@
     <p>
         <strong>Namig:</strong> 
         <span id="productHint"></span>
-        <button id="hintBtn" onclick="showHint()" style="margin-left:5px;">❓</button>
+        <button id="hintBtn" onclick="showHint()">❓</button>
     </p>
 </div>
+
+<!-- Skripte -->
+<script src="products.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
