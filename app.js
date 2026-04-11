@@ -28,8 +28,8 @@ function startScanner() {
         const code = result.codeResult.code;
         Quagga.stop();
         scanning=false;
-        scannerDiv.style.background = "#000"; // skrij video po skeniranju
-        playBeep(); // zvočni signal
+        scannerDiv.style.background = "#000"; // skrij video
+        playBeep();
         showProductInfo(code);
     });
 }
