@@ -5,7 +5,7 @@ function startScanner() {
     scanning = true;
 
     const scannerDiv = document.getElementById("scanner");
-    scannerDiv.innerHTML = "";
+    scannerDiv.innerHTML = ""; // očistimo prejšnje vsebino
     scannerDiv.style.position = "relative";
 
     Quagga.init({
@@ -22,39 +22,20 @@ function startScanner() {
             return;
         }
         Quagga.start();
-
-        // Počakamo, da Quagga ustvari video element
-        const observer = new MutationObserver(() => {
-            const video = scannerDiv.querySelector("video");
-            if (video) {
-                // ustvarimo overlay
-                const overlay = document.createElement("div");
-                overlay.id = "scannerOverlay";
-                overlay.style.position = "absolute";
-                overlay.style.top = video.offsetTop + "px";
-                overlay.style.left = video.offsetLeft + "px";
-                overlay.style.width = video.offsetWidth + "px";
-                overlay.style.height = video.offsetHeight + "px";
-                overlay.style.border = "5px solid red";
-                overlay.style.boxSizing = "border-box";
-                overlay.style.pointerEvents = "none";
-                overlay.style.opacity = "0.7";
-                scannerDiv.appendChild(overlay);
-
-                // observer ni več potreben
-                observer.disconnect();
-            }
-        });
-        observer.observe(scannerDiv, { childList: true });
     });
 
     Quagga.onDetected(function(result) {
+        // Vpišemo skenirano kodo v input polje
         document.getElementById("barcodeInput").value = result.codeResult.code;
+
+        // Kratek pisk
         playBeep();
+
+        // Zaustavimo Quagga
         Quagga.stop();
 
-        const overlay = document.getElementById("scannerOverlay");
-        if (overlay) overlay.remove();
+        // Odstranimo video element in vse ostalo znotraj scannerDiv
+        scannerDiv.innerHTML = "";
 
         scanning = false;
     });
