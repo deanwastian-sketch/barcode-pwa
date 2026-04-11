@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Barcode Scanner PWA</title>
+<title>Barcode Quiz PWA</title>
 <style>
     body {
         font-family: sans-serif;
@@ -24,7 +24,7 @@
         background: #000;
         margin-bottom: 10px;
         position: relative;
-        display: none; /* skrit ob zagonu */
+        display: none;
     }
     #productInfo {
         margin-top: 20px;
@@ -41,12 +41,28 @@
     #productInfo p {
         margin: 5px 0;
     }
+    #answerSection {
+        display: none;
+        margin-top: 10px;
+    }
+    #resultsSection {
+        display: none;
+        margin-top: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 5px;
+        text-align: left;
+    }
     #hintBtn {
         font-size: 16px;
         padding: 2px 6px;
         cursor: pointer;
     }
-
     /* Modal stil */
     .modal {
         display: none;
@@ -94,7 +110,6 @@
 </head>
 <body>
 
-<input type="text" id="barcodeInput" placeholder="Številka črtne kode">
 <button onclick="startScanner()">Zaženi kamero</button>
 <div id="scanner"></div>
 
@@ -111,6 +126,24 @@
     </p>
 </div>
 
+<div id="answerSection">
+    <input type="text" id="userAnswer" placeholder="Vpišite vaš odgovor">
+    <button onclick="submitAnswer()">Shrani</button>
+</div>
+
+<div id="resultsSection">
+    <h3>Pregled vaših odgovorov:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Artikel</th>
+                <th>Vaš odgovor</th>
+            </tr>
+        </thead>
+        <tbody id="resultsTable"></tbody>
+    </table>
+</div>
+
 <!-- Modal za namig -->
 <div id="hintModal" class="modal">
     <div class="modal-content">
@@ -119,10 +152,8 @@
     </div>
 </div>
 
-<!-- Skripte -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 <script src="products.js"></script>
 <script src="app.js"></script>
-
 </body>
 </html>
