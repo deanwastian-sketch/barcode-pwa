@@ -1,13 +1,13 @@
 let scanning = false;
 
 function startScanner() {
-    if (scanning) return; // prepreči večkratni start
+    if (scanning) return;
     scanning = true;
 
     const scannerDiv = document.getElementById("scanner");
-    scannerDiv.innerHTML = ""; // očisti prejšnje vsebino
+    scannerDiv.innerHTML = "";
 
-    // Dodamo overlay za vizualni efekt
+    // Dodamo overlay z rdečim okvirjem
     const overlay = document.createElement("div");
     overlay.id = "scannerOverlay";
     overlay.style.position = "absolute";
@@ -15,7 +15,7 @@ function startScanner() {
     overlay.style.left = "0";
     overlay.style.width = "100%";
     overlay.style.height = "100%";
-    overlay.style.border = "5px solid limegreen";
+    overlay.style.border = "5px solid red"; // ← tukaj spremenjena barva
     overlay.style.boxSizing = "border-box";
     overlay.style.pointerEvents = "none";
     overlay.style.opacity = "0.7";
@@ -43,17 +43,12 @@ function startScanner() {
     });
 
     Quagga.onDetected(function(result) {
-        // Vpis v polje
         document.getElementById("barcodeInput").value = result.codeResult.code;
-
-        // Zvočni signal
         playBeep();
-
-        // Zaustavimo Quagga
         Quagga.stop();
 
-        // Kratko obarvamo overlay, nato ga odstranimo
-        overlay.style.borderColor = "green";
+        // Ob uspešnem skeniranju obarvamo overlay in ga odstranimo
+        overlay.style.borderColor = "red"; // ostane rdeč
         setTimeout(() => {
             scannerDiv.innerHTML = "";
             scanning = false;
@@ -61,7 +56,6 @@ function startScanner() {
     });
 }
 
-// Funkcija za zvočni signal
 function playBeep() {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const oscillator = audioCtx.createOscillator();
@@ -69,10 +63,9 @@ function playBeep() {
     oscillator.frequency.setValueAtTime(1000, audioCtx.currentTime);
     oscillator.connect(audioCtx.destination);
     oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.1); // 0.1s pisk
+    oscillator.stop(audioCtx.currentTime + 0.1);
 }
 
-// Registracija service workerja
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
