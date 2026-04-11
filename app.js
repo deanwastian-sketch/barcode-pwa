@@ -1,25 +1,27 @@
 let scanning = false;
 let scannedArticles = [];
-let scannedBarcodes = []; // shrani barcodes že poskeniranih artiklov
+let scannedBarcodes = [];
 let userAnswers = [];
 let currentBarcode = null;
 
-const TOTAL_ARTICLES = 4; // testiranje 4 artiklov
+const TOTAL_ARTICLES = 4;
+
+function updateProgress() {
+    document.getElementById("progress").innerText = `Artikel ${scannedArticles.length + 1} / ${TOTAL_ARTICLES}`;
+}
 
 function startScanner() {
     if (scanning) return;
     scanning = true;
+
+    updateProgress();
 
     const scannerDiv = document.getElementById("scanner");
     scannerDiv.innerHTML = "";
     scannerDiv.style.display = "block";
 
     Quagga.init({
-        inputStream: {
-            type: "LiveStream",
-            target: scannerDiv,
-            constraints: { facingMode: "environment" }
-        },
+        inputStream: { type: "LiveStream", target: scannerDiv, constraints: { facingMode: "environment" } },
         decoder: { readers: ["ean_reader", "code_128_reader"] }
     }, function(err) {
         if (err) {
@@ -65,15 +67,14 @@ function showProductInfo(barcode) {
         return;
     }
 
-    // Preverimo, če je artikel že skeniran
     if (scannedBarcodes.includes(barcode)) {
         alert("Ta artikel je že bil poskeniran. Poskusite drugega.");
         startScanner();
         return;
     }
 
-    currentBarcode = barcode; 
-    scannedBarcodes.push(barcode); // zabeležimo barcode
+    currentBarcode = barcode;
+    scannedBarcodes.push(barcode);
 
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
@@ -88,6 +89,8 @@ function showProductInfo(barcode) {
     const answerInput = document.getElementById("userAnswer");
     answerInput.value = "";
     answerInput.focus();
+
+    updateProgress();
 }
 
 function submitAnswer() {
@@ -104,14 +107,13 @@ function submitAnswer() {
     scannedArticles.push(product.name);
     userAnswers.push(answer);
 
-    // skrijemo info in vnos
     document.getElementById("answerSection").style.display = "none";
     document.getElementById("productInfo").style.display = "none";
 
     if (scannedArticles.length >= TOTAL_ARTICLES) {
         showResults();
     } else {
-        startScanner(); // zažene naslednji sken
+        startScanner();
     }
 }
 
@@ -135,7 +137,6 @@ function showResults() {
     alert("Vsi odgovori so zabeleženi. Preverite rezultate spodaj.");
 }
 
-// Modal funkcije
 function showHint() {
     const infoDiv = document.getElementById("productInfo");
     const hint = infoDiv.dataset.hint;
@@ -148,15 +149,8 @@ function showHint() {
     modalText.innerText = hint;
     modal.classList.add("show");
 
-    closeBtn.onclick = function() {
-        modal.classList.remove("show");
-    }
-
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.classList.remove("show");
-        }
-    }
+    closeBtn.onclick = function() { modal.classList.remove("show"); }
+    window.onclick = function(event) { if (event.target === modal) modal.classList.remove("show"); }
 }
 
 if ('serviceWorker' in navigator) {
