@@ -17,7 +17,6 @@ function updateProgress() {
 }
 
 function startScanner() {
-    console.log("startScanner called");
     if (scanning) return;
     scanning = true;
 
@@ -27,41 +26,43 @@ function startScanner() {
     scannerDiv.innerHTML = "";
     scannerDiv.style.display = "block";
 
-    Quagga.offDetected();
+    setTimeout(() => {
+        Quagga.offDetected();
 
-    Quagga.init({
-        inputStream: { 
-            type: "LiveStream", 
-            target: scannerDiv, 
-            constraints: { facingMode: "environment" } 
-        },
-        decoder: { readers: ["ean_reader","code_128_reader"] }
-    }, function(err) {
-        if (err) { 
-            console.error(err); 
-            alert("Napaka pri dostopu do kamere."); 
-            scanning=false; scannerDiv.style.display="none"; 
-            return; 
-        }
-        Quagga.start();
-    });
+        Quagga.init({
+            inputStream: { 
+                type: "LiveStream", 
+                target: scannerDiv, 
+                constraints: { facingMode: "environment" } 
+            },
+            decoder: { readers: ["ean_reader","code_128_reader"] }
+        }, function(err) {
+            if (err) { 
+                console.error(err); 
+                alert("Napaka pri dostopu do kamere."); 
+                scanning=false; scannerDiv.style.display="none"; 
+                return; 
+            }
+            Quagga.start();
+        });
 
-    Quagga.onDetected(function(result){
-        const code = result.codeResult.code;
+        Quagga.onDetected(function(result){
+            const code = result.codeResult.code;
 
-        if (scannedBarcodes.includes(code)) {
-            playBeep(true); // drugačen pisk
-            alert("Ta artikel je že bil poskeniran.");
-            return; 
-        }
+            if (scannedBarcodes.includes(code)) {
+                playBeep(true);
+                alert("Ta artikel je že bil poskeniran.");
+                return; 
+            }
 
-        currentBarcode = code;
-        Quagga.stop();
-        scanning = false;
-        scannerDiv.style.display = "none";
+            currentBarcode = code;
+            Quagga.stop();
+            scanning = false;
+            scannerDiv.style.display = "none";
 
-        showProductInfo(code);
-    });
+            showProductInfo(code);
+        });
+    }, 50);
 }
 
 function playBeep(alreadyScanned=false){
@@ -119,4 +120,7 @@ function showResults(){
     for(let i=0;i<scannedArticles.length;i++){
         const row = document.createElement("tr");
         const cellArticle=document.createElement("td");
-        const cellAnswer=document.createElement("
+        const cellAnswer=document.createElement("td");
+        cellArticle.innerText = scannedArticles[i];
+        cellAnswer.innerText = userAnswers[i];
+       
