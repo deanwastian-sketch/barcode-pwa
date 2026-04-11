@@ -1,4 +1,7 @@
 let scanning = false;
+let scannedArticles = [];
+let userAnswers = [];
+let currentBarcode = null;
 
 function startScanner() {
     if (scanning) return;
@@ -6,7 +9,7 @@ function startScanner() {
 
     const scannerDiv = document.getElementById("scanner");
     scannerDiv.innerHTML = "";
-    scannerDiv.style.display = "block"; // pokažemo div ob kliku
+    scannerDiv.style.display = "block";
 
     Quagga.init({
         inputStream: {
@@ -28,13 +31,14 @@ function startScanner() {
 
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
-        document.getElementById("barcodeInput").value = code;
+        currentBarcode = code;
+        document.getElementById("barcodeInput")?.value && (document.getElementById("barcodeInput").value = code);
 
         playBeep();
         Quagga.stop();
 
         scannerDiv.innerHTML = "";
-        scannerDiv.style.display = "none"; // odstranimo črn kvadrat
+        scannerDiv.style.display = "none";
         scanning = false;
 
         showProductInfo(code);
@@ -56,6 +60,8 @@ function showProductInfo(barcode) {
     const product = products[barcode];
 
     if (product) {
+        scannedArticles.push(product.name);
+
         document.getElementById("productName").innerText = product.name;
         document.getElementById("productDesc").innerText = product.desc;
         document.getElementById("productWarehouse").innerText = product.warehouse;
@@ -64,37 +70,53 @@ function showProductInfo(barcode) {
         document.getElementById("productHint").innerText = "";
         infoDiv.style.display = "block";
         infoDiv.dataset.hint = product.hint;
+
+        document.getElementById("answerSection").style.display = "block";
+        const answerInput = document.getElementById("userAnswer");
+        answerInput.value = "";
+        answerInput.focus();
     } else {
         infoDiv.style.display = "none";
         alert("Artikel ni najden v bazi.");
     }
 }
 
-function showHint() {
-    const infoDiv = document.getElementById("productInfo");
-    const hint = infoDiv.dataset.hint;
-    if (!hint) return;
-
-    const modal = document.getElementById("hintModal");
-    const modalText = document.getElementById("modalHintText");
-    const closeBtn = modal.querySelector(".closeBtn");
-
-    modalText.innerText = hint;
-    modal.classList.add("show");
-
-    // zapiranje z gumbom
-    closeBtn.onclick = function() {
-        modal.classList.remove("show");
+function submitAnswer() {
+    const answerInput = document.getElementById("userAnswer");
+    const answer = answerInput.value.trim();
+    if (!answer) {
+        alert("Prosimo, vnesite vaš odgovor!");
+        return;
     }
 
-    // zapiranje ob kliku zunaj modal-content
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.classList.remove("show");
-        }
+    userAnswers.push(answer);
+
+    // skrijemo info in vnos
+    document.getElementById("answerSection").style.display = "none";
+    document.getElementById("productInfo").style.display = "none";
+
+    if (scannedArticles.length >= 10) {
+        showResults();
+    } else {
+        startScanner(); // zažene naslednji sken
     }
 }
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-}
+function showResults() {
+    const resultsSection = document.getElementById("resultsSection");
+    const resultsTable = document.getElementById("resultsTable");
+    resultsTable.innerHTML = "";
+
+    for (let i = 0; i < scannedArticles.length; i++) {
+        const row = document.createElement("tr");
+        const cellArticle = document.createElement("td");
+        const cellAnswer = document.createElement("td");
+        cellArticle.innerText = scannedArticles[i];
+        cellAnswer.innerText = userAnswers[i];
+        row.appendChild(cellArticle);
+        row.appendChild(cellAnswer);
+        resultsTable.appendChild(row);
+    }
+
+    resultsSection.style.display = "block";
+    alert("
