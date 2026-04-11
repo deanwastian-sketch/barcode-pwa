@@ -24,5 +24,13 @@ const products = {
         stock: 35,
         lastOrder: "2026-04-10",
         hint: "Primerno za umetniške projekte."
+    },
+    "5556667778889": {
+        name: "Rdeča barva",
+        desc: "Akrilna, 250ml",
+        warehouse: "Celje",
+        stock: 35,
+        lastOrder: "2026-04-10",
+        hint: "Primerno za umetniške projekte."
     }
 };
