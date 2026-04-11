@@ -1,5 +1,5 @@
 // Ime cache-a
-const CACHE_NAME = "barcode-pwa-v10";
+const CACHE_NAME = "barcode-pwa-v11";
 
 // Datoteke, ki jih želimo cache-ati
 const urlsToCache = [
