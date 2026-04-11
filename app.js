@@ -119,4 +119,33 @@ function showResults() {
     }
 
     resultsSection.style.display = "block";
-    alert("
+    alert("Vsi odgovori so zabeleženi. Preverite rezultate spodaj.");
+}
+
+// Modal funkcije
+function showHint() {
+    const infoDiv = document.getElementById("productInfo");
+    const hint = infoDiv.dataset.hint;
+    if (!hint) return;
+
+    const modal = document.getElementById("hintModal");
+    const modalText = document.getElementById("modalHintText");
+    const closeBtn = modal.querySelector(".closeBtn");
+
+    modalText.innerText = hint;
+    modal.classList.add("show");
+
+    closeBtn.onclick = function() {
+        modal.classList.remove("show");
+    }
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.classList.remove("show");
+        }
+    }
+}
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+}
