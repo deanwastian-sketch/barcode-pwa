@@ -21,6 +21,11 @@ window.addEventListener("message", function(event){
     updateProgress();
 });
 
+function updateCounter() {
+  const el = document.getElementById("counter");
+  if (el) el.innerText = `${userAnswers.length} / ${MAX_ROUNDS}`;
+}
+
 function showProductInfo(barcode) {
   const product = products[barcode];
 
@@ -64,19 +69,19 @@ function saveAnswer() {
   const answer = document.getElementById("userAnswer").value.trim();
   if (!answer) { alert("Vnesi odgovor!"); return; }
 
-  userAnswers.push({ barcode: currentBarcode, answer });
-  playBeep(); // optional: pisk ob shranjevanju
+  userAnswers.push({ barcode: currentBarcode, answer: answer });
 
   document.getElementById("userAnswer").value = "";
   document.getElementById("productInfo").style.display = "none";
   document.getElementById("answerSection").style.display = "none";
 
-  // KONEC PO 10 VNESENIH ODGOVORIH
+  // osveži števec + progress
+  updateUIProgress();
+
+  // konec po 10 odgovorih
   if (userAnswers.length >= MAX_ROUNDS) {
     showResults();
-    // po želji: onemogoči nadaljnje skeniranje
-    document.getElementById("startBtn").disabled = true;
-    return;
+    document.getElementById("startBtn").disabled = true; // opcijsko
   }
 }
 
@@ -102,7 +107,35 @@ function playBeepError() {
   oscillator.stop(audioCtx.currentTime + 0.3);
 }
 
+function showResults() {
+  const tbody = document.querySelector("#resultsTable tbody");
+  tbody.innerHTML = "";
+
+  userAnswers.forEach(item => {
+    const product = products[item.barcode];
+    const tr = document.createElement("tr");
+
+    const tdName = document.createElement("td");
+    tdName.innerText = product ? product.name : ("Neznan (" + item.barcode + ")");
+
+    const tdAnswer = document.createElement("td");
+    tdAnswer.innerText = item.answer;
+
+    tr.appendChild(tdName);
+    tr.appendChild(tdAnswer);
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("resultsTable").style.display = "table";
+}
+
 function updateProgress() {
   const progress = (userAnswers.length / MAX_ROUNDS) * 100;
   document.getElementById("progressBar").style.width = progress + "%";
 }
+function updateUIProgress() {
+  updateCounter();
+  updateProgress();
+}
+
+updateUIProgress();
