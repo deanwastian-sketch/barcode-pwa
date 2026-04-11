@@ -28,7 +28,6 @@ function startScanner() {
         const code = result.codeResult.code;
         Quagga.stop();
         scanning=false;
-        scannerDiv.style.background = "#000"; // skrij video
         playBeep();
         showProductInfo(code);
     });
@@ -50,6 +49,10 @@ function showProductInfo(barcode){
         alert("Artikel ni najden."); 
         return; 
     }
+
+    // Skrij vse video elemente, da črn kvadrat ne blokira info
+    const videos = document.querySelectorAll("#scanner video");
+    videos.forEach(v => v.style.display = "none");
 
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
