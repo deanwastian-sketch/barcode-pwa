@@ -8,8 +8,8 @@ const products = {
         lastOrder: "12.4.2026",
         hint: "Nepogrešljivo ob kavi"
     },
-    "3831093320914": {
-        name: "Vinkl",
+    "4058143083745": {
+        name: "Obeski",
         desc: "Leseni, standardni",
         warehouse: "Maribor",
         stock: 100,
@@ -17,8 +17,8 @@ const products = {
         hint: "Idealno za pisanje na papir."
     },
     // primer dodajanja novega artikla
-    "9002843059369": {
-        name: "Ročaj",
+    "4056232161442": {
+        name: "Dihtunge",
         desc: "Akrilna, 250ml",
         warehouse: "Celje",
         stock: 35,
