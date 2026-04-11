@@ -20,7 +20,7 @@ function startScanner() {
     scanning = true;
 
     const scannerDiv = document.getElementById("scanner");
-    scannerDiv.style.display = "block";
+    scannerDiv.style.opacity = 1; // zdaj vidno
 
     Quagga.offDetected();
     Quagga.init({
@@ -41,7 +41,7 @@ function startScanner() {
         currentBarcode = code;
         Quagga.stop();
         scanning=false;
-        scannerDiv.style.display="none";
+        scannerDiv.style.opacity=0; // skrije video
         showProductInfo(code);
     });
 }
@@ -110,4 +110,4 @@ function showResults(){
 function showHint(){
     const hint = document.getElementById("productInfo").dataset.hint;
     document.getElementById("modalHintText").innerText = hint;
-    document.getElementById("hintModal").classList.add("
+    document.getElementById("
