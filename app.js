@@ -8,6 +8,7 @@ function startScanner() {
     scanning = true;
 
     const scannerDiv = document.getElementById("scanner");
+    scannerDiv.innerHTML = ""; // očisti prejšnji video
 
     Quagga.offDetected();
     Quagga.init({
@@ -38,7 +39,8 @@ function startScanner() {
         Quagga.stop(); // ustavi kamero
         scanning=false;
         playBeep();
-        setTimeout(() => showProductInfo(code), 150); // počakaj da se video popolnoma ustavi
+        // Počakaj, da se video popolnoma odstrani in omogoči input
+        requestAnimationFrame(() => showProductInfo(code));
     });
 }
 
@@ -69,9 +71,12 @@ function showProductInfo(barcode){
         return; 
     }
 
-    // Odstrani vse video elemente iz DOM, da input postane interaktiven
-    const videos = document.querySelectorAll("#scanner video");
-    videos.forEach(v => v.remove());
+    const scannerDiv = document.getElementById("scanner");
+    const videos = scannerDiv.querySelectorAll("video");
+    videos.forEach(v => {
+        v.style.display = "none"; // video skrij, pointer-events odstranimo
+        v.style.pointerEvents = "none";
+    });
 
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
@@ -80,6 +85,9 @@ function showProductInfo(barcode){
 
     scannedArticles.push(barcode);
     updateProgress();
+
+    // fokus na input, da je takoj možno vpisovati
+    document.getElementById("userAnswer").focus();
 }
 
 function saveAnswer(){
