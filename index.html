@@ -6,6 +6,7 @@
 <title>Kviz Skeniranja Artiklov</title>
 <link rel="stylesheet" href="style.css">
 <style>
+body { font-family: Arial, sans-serif; padding: 20px; }
 #scanner {
     width: 100%;
     height: 300px;
@@ -18,6 +19,7 @@
 }
 #answerSection {
     display: none;
+    margin-bottom: 20px;
 }
 #resultsSection {
     display: none;
@@ -46,11 +48,14 @@
     float: right;
     font-weight: bold;
 }
+button { padding: 10px 15px; font-size: 16px; }
+input[type=text] { padding: 8px; width: 60%; font-size: 16px; }
 </style>
 </head>
 <body>
 
 <h2>Kviz Skeniranja Artiklov</h2>
+
 <p id="instructions">Poskenirajte artikel in vnesite svoj odgovor.</p>
 <p id="progress">Artikel 0 / 4</p>
 
@@ -63,7 +68,7 @@
     <p><strong>Skladišče:</strong> <span id="productWarehouse"></span></p>
     <p><strong>Zaloga:</strong> <span id="productStock"></span></p>
     <p><strong>Zadnje naročilo:</strong> <span id="productLastOrder"></span></p>
-    <button onclick="showHint()">?</button>
+    <button onclick="showHint()">Namig ?</button>
 </div>
 
 <div id="answerSection">
