@@ -1,5 +1,5 @@
 const products = {
-  "3830001000006": { name: "Mleko 1L", desc: "Polnomastno mleko 3.5%" },
+  "3830076490125": { name: "Mleko 1L", desc: "Polnomastno mleko 3.5%" },
   "3830001000013": { name: "Kruh bel", desc: "Svež beli kruh 500 g" },
   "3830001000020": { name: "Jogurt sadni", desc: "Jagodni jogurt 180 g" },
   "3830001000037": { name: "Maslo", desc: "Maslo 250 g" },
