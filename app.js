@@ -69,8 +69,9 @@ function showProductInfo(barcode){
         return; 
     }
 
+    // Odstrani vse video elemente, da input postane interaktiven
     const videos = document.querySelectorAll("#scanner video");
-    videos.forEach(v => v.style.display = "none");
+    videos.forEach(v => v.remove());
 
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
