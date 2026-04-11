@@ -20,49 +20,46 @@ function startScanner() {
     if (scanning) return;
     scanning = true;
 
-    updateProgress();
-
     const scannerDiv = document.getElementById("scanner");
-    scannerDiv.innerHTML = "";
     scannerDiv.style.display = "block";
+    scannerDiv.innerHTML = "";
 
-    setTimeout(() => {
-        Quagga.offDetected();
+    Quagga.offDetected();
 
-        Quagga.init({
-            inputStream: { 
-                type: "LiveStream", 
-                target: scannerDiv, 
-                constraints: { facingMode: "environment" } 
-            },
-            decoder: { readers: ["ean_reader","code_128_reader"] }
-        }, function(err) {
-            if (err) { 
-                console.error(err); 
-                alert("Napaka pri dostopu do kamere."); 
-                scanning=false; scannerDiv.style.display="none"; 
-                return; 
-            }
-            Quagga.start();
-        });
-
-        Quagga.onDetected(function(result){
-            const code = result.codeResult.code;
-
-            if (scannedBarcodes.includes(code)) {
-                playBeep(true);
-                alert("Ta artikel je že bil poskeniran.");
-                return; 
-            }
-
-            currentBarcode = code;
-            Quagga.stop();
+    Quagga.init({
+        inputStream: { 
+            type: "LiveStream", 
+            target: scannerDiv, 
+            constraints: { facingMode: "environment" } 
+        },
+        decoder: { readers: ["ean_reader","code_128_reader"] }
+    }, function(err) {
+        if (err) { 
+            console.error(err);
+            alert("Napaka pri dostopu do kamere."); 
             scanning = false;
             scannerDiv.style.display = "none";
+            return;
+        }
+        Quagga.start();
+    });
 
-            showProductInfo(code);
-        });
-    }, 50);
+    Quagga.onDetected(function(result){
+        const code = result.codeResult.code;
+
+        if (scannedBarcodes.includes(code)) {
+            playBeep(true);
+            alert("Ta artikel je že bil poskeniran.");
+            return; 
+        }
+
+        currentBarcode = code;
+        Quagga.stop();
+        scanning = false;
+        scannerDiv.style.display = "none";
+
+        showProductInfo(code);
+    });
 }
 
 function playBeep(alreadyScanned=false){
@@ -77,7 +74,11 @@ function playBeep(alreadyScanned=false){
 
 function showProductInfo(barcode){
     const product = products[barcode];
-    if(!product){ alert("Artikel ni najden v bazi. Poskusite znova."); return startScanner(); }
+    if(!product){ 
+        alert("Artikel ni najden v bazi. Poskusite znova."); 
+        startScanner(); 
+        return;
+    }
 
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
@@ -123,4 +124,12 @@ function showResults(){
         const cellAnswer=document.createElement("td");
         cellArticle.innerText = scannedArticles[i];
         cellAnswer.innerText = userAnswers[i];
-       
+        row.appendChild(cellArticle);
+        row.appendChild(cellAnswer);
+        resultsTable.appendChild(row);
+    }
+
+    resultsSection.style.display="block";
+    document.getElementById("instructions").innerText="Kviz končan!";
+    document.getElementById("progressContainer").style.display="none";
+    document.get
