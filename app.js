@@ -3,6 +3,8 @@ let scannedArticles = [];
 let userAnswers = [];
 let currentBarcode = null;
 
+const TOTAL_ARTICLES = 4; // zdaj testiramo samo 4 artikle
+
 function startScanner() {
     if (scanning) return;
     scanning = true;
@@ -32,7 +34,6 @@ function startScanner() {
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
         currentBarcode = code;
-        document.getElementById("barcodeInput")?.value && (document.getElementById("barcodeInput").value = code);
 
         playBeep();
         Quagga.stop();
@@ -95,7 +96,7 @@ function submitAnswer() {
     document.getElementById("answerSection").style.display = "none";
     document.getElementById("productInfo").style.display = "none";
 
-    if (scannedArticles.length >= 10) {
+    if (scannedArticles.length >= TOTAL_ARTICLES) {
         showResults();
     } else {
         startScanner(); // zažene naslednji sken
