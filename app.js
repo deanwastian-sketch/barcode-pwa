@@ -6,9 +6,14 @@ let currentBarcode = null;
 
 const TOTAL_ARTICLES = 4;
 
-// posodobi števec
 function updateProgress() {
-    document.getElementById("progress").innerText = `Artikel ${scannedArticles.length + 1} / ${TOTAL_ARTICLES}`;
+    const progressText = document.getElementById("progress");
+    const progressBar = document.getElementById("progressBar");
+    const count = scannedArticles.length;
+    progressText.innerText = `Artikel ${count + 1} / ${TOTAL_ARTICLES}`;
+    const percent = Math.round(((count) / TOTAL_ARTICLES) * 100);
+    progressBar.style.width = percent + "%";
+    progressBar.innerText = percent + "%";
 }
 
 function startScanner() {
@@ -21,34 +26,23 @@ function startScanner() {
     scannerDiv.innerHTML = "";
     scannerDiv.style.display = "block";
 
-    // unbind prejšnji handler
     Quagga.offDetected();
 
     Quagga.init({
-        inputStream: {
-            type: "LiveStream",
-            target: scannerDiv,
-            constraints: { facingMode: "environment" }
-        },
-        decoder: { readers: ["ean_reader", "code_128_reader"] }
+        inputStream: { type: "LiveStream", target: scannerDiv, constraints: { facingMode: "environment" } },
+        decoder: { readers: ["ean_reader","code_128_reader"] }
     }, function(err) {
-        if (err) {
-            console.error(err);
-            alert("Napaka pri dostopu do kamere. Preverite dovoljenja.");
-            scanning = false;
-            scannerDiv.style.display = "none";
-            return;
-        }
+        if (err) { console.error(err); alert("Napaka pri dostopu do kamere."); scanning=false; scannerDiv.style.display="none"; return; }
         Quagga.start();
     });
 
-    Quagga.onDetected(function(result) {
+    Quagga.onDetected(function(result){
         const code = result.codeResult.code;
 
-        // preveri, ali je artikel že skeniran
         if (scannedBarcodes.includes(code)) {
+            playBeep(true); // drugačen pisk
             alert("Ta artikel je že bil poskeniran. Poskusite drugega.");
-            return; // kamera ostane aktivna, uporabnik lahko poskusi drug barcode
+            return; 
         }
 
         currentBarcode = code;
@@ -60,23 +54,19 @@ function startScanner() {
     });
 }
 
-function playBeep() {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playBeep(alreadyScanned=false){
+    const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
     const oscillator = audioCtx.createOscillator();
     oscillator.type = "square";
-    oscillator.frequency.setValueAtTime(1000, audioCtx.currentTime);
+    oscillator.frequency.setValueAtTime(alreadyScanned?500:1000, audioCtx.currentTime);
     oscillator.connect(audioCtx.destination);
     oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.1);
+    oscillator.stop(audioCtx.currentTime + 0.15);
 }
 
-// prikaži podatke o artiklu
-function showProductInfo(barcode) {
+function showProductInfo(barcode){
     const product = products[barcode];
-    if (!product) {
-        alert("Artikel ni najden v bazi. Poskusite znova.");
-        return startScanner();
-    }
+    if(!product){ alert("Artikel ni najden v bazi. Poskusite znova."); return startScanner(); }
 
     document.getElementById("productName").innerText = product.name;
     document.getElementById("productDesc").innerText = product.desc;
@@ -88,72 +78,36 @@ function showProductInfo(barcode) {
 
     document.getElementById("answerSection").style.display = "block";
     const answerInput = document.getElementById("userAnswer");
-    answerInput.value = "";
+    answerInput.value="";
     answerInput.focus();
 
     playBeep();
     updateProgress();
 }
 
-function submitAnswer() {
+function submitAnswer(){
     const answerInput = document.getElementById("userAnswer");
     const answer = answerInput.value.trim();
-    if (!answer) {
-        alert("Prosimo, vnesite vaš odgovor!");
-        return;
-    }
+    if(!answer){ alert("Prosimo, vnesite vaš odgovor!"); return; }
 
-    // shrani barcode in odgovor
     scannedArticles.push(products[currentBarcode].name);
     scannedBarcodes.push(currentBarcode);
     userAnswers.push(answer);
 
-    document.getElementById("answerSection").style.display = "none";
-    document.getElementById("productInfo").style.display = "none";
+    document.getElementById("answerSection").style.display="none";
+    document.getElementById("productInfo").style.display="none";
 
-    if (scannedArticles.length >= TOTAL_ARTICLES) {
-        showResults();
-    } else {
-        startScanner(); // naslednji sken
-    }
+    if(scannedArticles.length >= TOTAL_ARTICLES){ showResults(); }
+    else { startScanner(); }
 }
 
-function showResults() {
+function showResults(){
     const resultsSection = document.getElementById("resultsSection");
-    const resultsTable = document.getElementById("resultsTable");
-    resultsTable.innerHTML = "";
+    const resultsTable = document.getElementById("resultsTable").querySelector("tbody");
+    resultsTable.innerHTML="";
 
-    for (let i = 0; i < scannedArticles.length; i++) {
+    for(let i=0;i<scannedArticles.length;i++){
         const row = document.createElement("tr");
-        const cellArticle = document.createElement("td");
-        const cellAnswer = document.createElement("td");
-        cellArticle.innerText = scannedArticles[i];
-        cellAnswer.innerText = userAnswers[i];
-        row.appendChild(cellArticle);
-        row.appendChild(cellAnswer);
-        resultsTable.appendChild(row);
-    }
-
-    resultsSection.style.display = "block";
-    alert("Vsi odgovori so zabeleženi. Preverite rezultate spodaj.");
-}
-
-// modal za namig
-function showHint() {
-    const hint = document.getElementById("productInfo").dataset.hint;
-    if (!hint) return;
-
-    const modal = document.getElementById("hintModal");
-    const modalText = document.getElementById("modalHintText");
-    const closeBtn = modal.querySelector(".closeBtn");
-
-    modalText.innerText = hint;
-    modal.classList.add("show");
-
-    closeBtn.onclick = function() { modal.classList.remove("show"); }
-    window.onclick = function(event) { if (event.target === modal) modal.classList.remove("show"); }
-}
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-}
+        const cellArticle=document.createElement("td");
+        const cellAnswer=document.createElement("td");
+        cell
