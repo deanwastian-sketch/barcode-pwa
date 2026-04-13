@@ -144,16 +144,6 @@ function launchConfetti() {
 
 // ---------------- Finish button logic ----------------
 
-function enableOpenStartButton() {
-  const btn = document.getElementById("openStartBtn");
-  if (!btn) return;
-
-  btn.onclick = function () {
-    const table = document.getElementById("resultsTable");
-    if (table) table.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-}
-
 function showFinishView() {
   // Skrij začetne elemente
   const hideIds = ["welcomeTitle", "introText", "startBtn", "counterContainer"];
@@ -172,9 +162,7 @@ function showFinishView() {
   const finish = document.getElementById("finishMessage");
   if (finish) finish.style.display = "block";
 
-  // Aktiviraj gumb “ZAČNI ODPIRANJE”
-  enableOpenStartButton();
-}
+  }
 
 // ---------------- Hard-stop handling ----------------
 
