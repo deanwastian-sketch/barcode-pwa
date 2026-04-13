@@ -1,12 +1,62 @@
 const products = {
-  "3830076490125": { name: "Mleko 1L", desc: "Polnomastno mleko 3.5%" },
-  "3830001000013": { name: "Kruh bel", desc: "Svež beli kruh 500 g" },
-  "3830001000020": { name: "Jogurt sadni", desc: "Jagodni jogurt 180 g" },
-  "3830001000037": { name: "Maslo", desc: "Maslo 250 g" },
-  "3830001000044": { name: "Sir gauda", desc: "Poltrdi sir v kosu" },
-  "3830001000051": { name: "Jabolčni sok", desc: "100 % naravni sok 1 L" },
-  "3830001000068": { name: "Testenine", desc: "Špageti durum pšenica" },
-  "3830001000075": { name: "Riž", desc: "Dolgozrnati riž 1 kg" },
-  "3830001000082": { name: "Čokolada", desc: "Mlečna čokolada 100 g" },
-  "3830001000099": { name: "Kava mleta", desc: "Mleta kava 250 g" }
+  "2002051976011": {
+    name: "Artikel 1",
+    desc: "Testni artikel št. 1",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 01"
+  },
+  "2002051976028": {
+    name: "Artikel 2",
+    desc: "Testni artikel št. 2",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 02"
+  },
+  "2002051976035": {
+    name: "Artikel 3",
+    desc: "Testni artikel št. 3",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 03"
+  },
+  "2002051976042": {
+    name: "Artikel 4",
+    desc: "Testni artikel št. 4",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 04"
+  },
+  "2002051976059": {
+    name: "Artikel 5",
+    desc: "Testni artikel št. 5",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 05"
+  },
+  "2002051976066": {
+    name: "Artikel 6",
+    desc: "Testni artikel št. 6",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 06"
+  },
+  "2002051976073": {
+    name: "Artikel 7",
+    desc: "Testni artikel št. 7",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 07"
+  },
+  "2002051976080": {
+    name: "Artikel 8",
+    desc: "Testni artikel št. 8",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 08"
+  },
+  "2002051976097": {
+    name: "Artikel 9",
+    desc: "Testni artikel št. 9",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 09"
+  },
+  "2002051976103": {
+    name: "Artikel 10",
+    desc: "Testni artikel št. 10",
+    category: "Test",
+    note: "Datum 02.05.1976 – zap. 10"
+  }
 };
