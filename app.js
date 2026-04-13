@@ -315,8 +315,8 @@ function showResults() {
     const tr = document.createElement("tr");
 
     const tdName = document.createElement("td");
-    tdName.innerText = product ? product.name : item.barcode;
-
+    tdName.innerText = product ? (product.naziv || product.name || item.barcode) : item.barcode;
+    
     const tdAnswer = document.createElement("td");
     tdAnswer.innerText = item.answer;
 
