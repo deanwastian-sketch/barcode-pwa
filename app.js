@@ -9,13 +9,14 @@ let scanWindowOpen = false;
 
 function updateCounter() {
   const el = document.getElementById("counter");
-  if (el) el.innerText = `${userAnswers.length} / ${MAX_ROUNDS}`;
+  if (el) el.innerText = userAnswers.length + " / " + MAX_ROUNDS;
 }
 
 function updateProgress() {
-  const progress = (userAnswers.length / MAX_ROUNDS) * 100;
   const bar = document.getElementById("progressBar");
-  if (bar) bar.style.width = progress + "%";
+  if (!bar) return;
+  const progress = (userAnswers.length / MAX_ROUNDS) * 100;
+  bar.style.width = progress + "%";
 }
 
 function updateUIProgress() {
@@ -24,20 +25,15 @@ function updateUIProgress() {
 }
 
 // Toast (če obstaja element #toast)
-function showToast(message, isError = true) {
+function showToast(message, isError) {
   const toast = document.getElementById("toast");
-  if (!toast) {
-    // fallback: če nimaš toasta, vsaj alert
-    // (lahko zakomentiraš, če nočeš alertov)
-    // alert(message);
-    return;
-  }
+  if (!toast) return;
 
   toast.innerText = message;
   toast.style.background = isError ? "#b71c1c" : "#2e7d32";
   toast.style.display = "block";
 
-  setTimeout(() => {
+  setTimeout(function () {
     toast.style.display = "none";
   }, 2500);
 }
@@ -81,7 +77,7 @@ function playBeepError() {
 }
 
 // ---------------- EAN-13 validation (checksum) ----------------
-// Check digit pravilo: vsota z utežmi 1/3 po prvih 12 cifrah, 13. je kontrolna.
+
 function isValidEAN13(code) {
   if (!/^\d{13}$/.test(code)) return false;
 
@@ -106,9 +102,12 @@ function openScanner() {
   window.open("scanner.html", "_blank", "width=420,height=680");
 }
 
-document.getElementById("startBtn").addEventListener("click", () => {
-  openScanner();
-});
+const startBtn = document.getElementById("startBtn");
+if (startBtn) {
+  startBtn.addEventListener("click", function () {
+    openScanner();
+  });
+}
 
 // ---------------- Confetti ----------------
 
@@ -116,7 +115,6 @@ function launchConfetti() {
   const container = document.getElementById("confettiContainer");
   if (!container) return;
 
-  // počisti stare konfete (da ne ostanejo v DOM-u)
   container.innerHTML = "";
 
   const colors = ["#f44336", "#ffeb3b", "#4caf50", "#2196f3", "#e91e63"];
@@ -125,7 +123,7 @@ function launchConfetti() {
     const confetti = document.createElement("div");
     confetti.className = "confetti";
 
-    confetti.style.left = Math.random() * 100 + "vw";
+    confetti.style.left = (Math.random() * 100) + "vw";
     confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
 
     const w = 6 + Math.random() * 10;
@@ -138,8 +136,44 @@ function launchConfetti() {
 
     container.appendChild(confetti);
 
-    setTimeout(() => confetti.remove(), 4500);
+    setTimeout(function () {
+      confetti.remove();
+    }, 4500);
   }
+}
+
+// ---------------- Finish button logic ----------------
+
+function enableOpenStartButton() {
+  const btn = document.getElementById("openStartBtn");
+  if (!btn) return;
+
+  btn.onclick = function () {
+    const table = document.getElementById("resultsTable");
+    if (table) table.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+}
+
+function showFinishView() {
+  // Skrij začetne elemente
+  const hideIds = ["welcomeTitle", "introText", "startBtn", "counterContainer"];
+  for (let i = 0; i < hideIds.length; i++) {
+    const el = document.getElementById(hideIds[i]);
+    if (el) el.style.display = "none";
+  }
+
+  // Skrij še produktni UI, če je slučajno viden
+  const pi = document.getElementById("productInfo");
+  const as = document.getElementById("answerSection");
+  if (pi) pi.style.display = "none";
+  if (as) as.style.display = "none";
+
+  // Pokaži finish message
+  const finish = document.getElementById("finishMessage");
+  if (finish) finish.style.display = "block";
+
+  // Aktiviraj gumb “ZAČNI ODPIRANJE”
+  enableOpenStartButton();
 }
 
 // ---------------- Hard-stop handling ----------------
@@ -160,7 +194,9 @@ function failScanAndRetry(message) {
   currentBarcode = "";
 
   // ponovno odpri kamero
-  setTimeout(() => openScanner(), 250);
+  setTimeout(function () {
+    openScanner();
+  }, 250);
 }
 
 function showProductInfo(barcode) {
@@ -178,12 +214,13 @@ function showProductInfo(barcode) {
 window.addEventListener("message", function (event) {
   if (event.origin !== window.location.origin) return;
 
-  // scanner okno se je zaprlo
   scanWindowOpen = false;
 
-  const code = (event.data?.barcode || "").trim();
+  // event.data lahko ima različne oblike – poskrbimo za varnost
+  const data = event.data || {};
+  const code = (data.barcode || "").toString().trim();
+
   if (!code) {
-    // če ni kode, omogoči gumb nazaj
     const btn = document.getElementById("startBtn");
     if (btn && userAnswers.length < MAX_ROUNDS) btn.disabled = false;
     return;
@@ -200,7 +237,7 @@ window.addEventListener("message", function (event) {
   }
 
   // 3) Ne dovolimo duplikatov
-  if (scannedArticles.includes(code)) {
+  if (scannedArticles.indexOf(code) !== -1) {
     return failScanAndRetry("⚠️ Ta artikel je bil že poskeniran. Prosim poskusi znova poskenirati drug artikel.");
   }
 
@@ -208,7 +245,7 @@ window.addEventListener("message", function (event) {
   currentBarcode = code;
   scannedArticles.push(code);
 
-  // ✅ potrditveni pisk za uspešen sken artikla
+  // ✅ potrditveni pisk
   playBeepSuccess();
 
   showProductInfo(code);
@@ -218,16 +255,17 @@ window.addEventListener("message", function (event) {
 
 // ---------------- Save Answer ----------------
 
-document.getElementById("saveBtn").addEventListener("click", saveAnswer);
+const saveBtn = document.getElementById("saveBtn");
+if (saveBtn) saveBtn.addEventListener("click", saveAnswer);
 
 function saveAnswer() {
-  // ne dovoli shranjevanja brez veljavnega skena
   if (!currentBarcode || !products[currentBarcode]) {
     showToast("Najprej poskeniraj veljaven artikel.", true);
     return;
   }
 
-  const answer = document.getElementById("userAnswer").value.trim();
+  const ua = document.getElementById("userAnswer");
+  const answer = ua ? ua.value.trim() : "";
   if (!answer) {
     showToast("Vnesi odgovor!", true);
     return;
@@ -236,58 +274,50 @@ function saveAnswer() {
   userAnswers.push({ barcode: currentBarcode, answer: answer });
 
   // reset UI za naslednji artikel
-  document.getElementById("userAnswer").value = "";
-  document.getElementById("productInfo").style.display = "none";
-  document.getElementById("answerSection").style.display = "none";
+  if (ua) ua.value = "";
+  const pi = document.getElementById("productInfo");
+  const as = document.getElementById("answerSection");
+  if (pi) pi.style.display = "none";
+  if (as) as.style.display = "none";
   currentBarcode = "";
 
   updateUIProgress();
 
   // konec po 10 odgovorih
   if (userAnswers.length >= MAX_ROUNDS) {
+    launchConfetti();
+    showToast("🎉 Kviz zaključen!", false);
 
-  // 🎉 efekti
-  launchConfetti();
-  showToast("🎉 Kviz zaključen!", false);
+    // Preklopi v zaključni prikaz
+    showFinishView();
 
-  // ❌ skrij začetne elemente
-  const hideIds = [
-    "welcomeTitle",
-    "introText",
-    "startBtn",
-    "counterContainer"
-  ];
-  hideIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
+    // Pokaži rezultate (tabela)
+    showResults();
 
-  // ✅ pokaži zaključno sporočilo
-  const finish = document.getElementById("finishMessage");
-  if (finish) finish.style.display = "block";
-
-  // ✅ pokaži rezultate
-  showResults();
-
-  return;
-}
+    return;
+  }
 
   // omogoči nov sken
-  document.getElementById("startBtn").disabled = false;
+  const btn = document.getElementById("startBtn");
+  if (btn) btn.disabled = false;
 }
 
 // ---------------- Results ----------------
 
 function showResults() {
   const tbody = document.querySelector("#resultsTable tbody");
+  if (!tbody) return;
+
   tbody.innerHTML = "";
 
-  userAnswers.forEach(item => {
+  for (let i = 0; i < userAnswers.length; i++) {
+    const item = userAnswers[i];
     const product = products[item.barcode];
+
     const tr = document.createElement("tr");
 
     const tdName = document.createElement("td");
-    tdName.innerText = product.name;
+    tdName.innerText = product ? product.name : item.barcode;
 
     const tdAnswer = document.createElement("td");
     tdAnswer.innerText = item.answer;
@@ -295,9 +325,10 @@ function showResults() {
     tr.appendChild(tdName);
     tr.appendChild(tdAnswer);
     tbody.appendChild(tr);
-  });
+  }
 
-  document.getElementById("resultsTable").style.display = "table";
+  const table = document.getElementById("resultsTable");
+  if (table) table.style.display = "table";
 }
 
 // init
