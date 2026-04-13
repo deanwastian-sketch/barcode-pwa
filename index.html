@@ -149,10 +149,18 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
   <div id="progressBar"></div>
 </div>
 <div id="productInfo">
-    <p><strong>Naziv:</strong> <span id="productName"></span></p>
-    <p><strong>Opis:</strong> <span id="productDesc"></span></p>
-</div>
+  <p><strong>Naziv:</strong> <span id="productName"></span></p>
+  <p><strong>Opis:</strong> <span id="productDesc"></span></p>
 
+  <p><strong>Skladišče:</strong> <span id="productSkladisce"></span></p>
+  <p><strong>Zaloga:</strong> <span id="productZaloga"></span></p>
+  <p><strong>Zadnje naročilo:</strong> <span id="productNarocilo"></span></p>
+
+  <!-- Ikona za namig -->
+  <div style="margin-top:10px;">
+    <span id="hintBtn" style="cursor:pointer; font-size:22px;">❓</span>
+  </div>
+</div>
 <div id="answerSection">
     <input type="text" id="userAnswer" placeholder="Vnesi svoj odgovor">
     <button id="saveBtn">Shrani</button>
