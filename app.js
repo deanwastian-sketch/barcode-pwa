@@ -146,3 +146,61 @@ function saveAnswer() {
   // konec po 10 odgovorih
   if (userAnswers.length >= MAX_ROUNDS) {
     // konfete bomo urejali kasneje – a ta koda jih bo omogočila, če jih želiš
+    if (typeof launchConfetti === "function") launchConfetti();
+    showResults();
+    document.getElementById("startBtn").disabled = true;
+    return;
+  }
+
+  // omogoči nov sken
+  document.getElementById("startBtn").disabled = false;
+}
+
+// Zvoki
+function playBeep() {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioCtx();
+  const oscillator = audioCtx.createOscillator();
+  oscillator.type = "square";
+  oscillator.frequency.setValueAtTime(1000, audioCtx.currentTime);
+  oscillator.connect(audioCtx.destination);
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.15);
+}
+
+function playBeepError() {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioCtx();
+  const oscillator = audioCtx.createOscillator();
+  oscillator.type = "square";
+  oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+  oscillator.connect(audioCtx.destination);
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.3);
+}
+
+// Rezultati (vsi bodo znani, ker ne pustimo naprej brez products[barcode])
+function showResults() {
+  const tbody = document.querySelector("#resultsTable tbody");
+  tbody.innerHTML = "";
+
+  userAnswers.forEach(item => {
+    const product = products[item.barcode];
+    const tr = document.createElement("tr");
+
+    const tdName = document.createElement("td");
+    tdName.innerText = product.name;
+
+    const tdAnswer = document.createElement("td");
+    tdAnswer.innerText = item.answer;
+
+    tr.appendChild(tdName);
+    tr.appendChild(tdAnswer);
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("resultsTable").style.display = "table";
+}
+
+updateUIProgress();
+``
