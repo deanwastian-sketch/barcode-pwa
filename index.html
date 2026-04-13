@@ -33,9 +33,14 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
   font-weight: bold;
   margin-bottom: 20px;
 }
+#resultsTable {
+  display: none;
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 20px;   /* večje besedilo */
+}
 
-
-#resultsTable { display: none; margin-top: 20px; border-collapse: collapse; width: 100%; font-size: 18px; }
 #resultsTable th, #resultsTable td { border: 1px solid #000; padding: 8px; text-align: left; }
   #confettiContainer {
   position: fixed;
@@ -85,11 +90,11 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
 </head>
 <body>
 
-<h2 class="welcome">
+<h2 class="welcome" id="welcomeTitle">
   👑 Dobrodošla šefica!
 </h2>
 
-<p style="margin-bottom:16px; line-height:1.4;">
+<p id="introText" style="margin-bottom:16px; line-height:1.4;">
   Preveri posamezne kartice artiklov in ustrezno zabeleži svoje odgovore!<br /><br />
   <b>Pozor!</b><br />
   Vsak nepravilen odgovor pomeni, da ostaneš brez tega izdelka
@@ -114,7 +119,21 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
     <input type="text" id="userAnswer" placeholder="Vnesi svoj odgovor">
     <button id="saveBtn">Shrani</button>
 </div>
+<div id="finishMessage" style="display:none; margin-bottom:20px;">
+  <h2 style="text-align:center;">🎉 Čestitke, uspešno zaključeno!</h2>
 
+  <p style="font-size:20px; line-height:1.4;">
+    Bravo, težji del je zdaj mimo. Zdaj sledi zabavni del, odpiranja paketov.
+  </p>
+
+  <p style="font-size:20px; line-height:1.4;">
+    Na glas preberi odgovor, ki si ga zapisala za prvi artikel, nato počasi
+    odpri škatlo. V kolikor si ugotovila pravilno lahko izdelek obdržiš.
+    Če si se zmotila pa med svojimi gosti izberi nekoga, ki mu bo ta izdelek
+    sigurno prav prišel in mu ga podari! Pa srečno!
+  </p>
+</div>
+``
 <table id="resultsTable">
     <thead>
         <tr>
