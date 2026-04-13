@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kviz Skeniranja Artiklov</title>
+<title>Skeniranje artiklov</title>
 <style>
 body { font-family: Arial, sans-serif; padding: 10px; font-size: 18px; }
 h2 { font-size: 26px; }
@@ -17,17 +17,64 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
 
 #answerSection { display: none; margin-top: 10px; }
 #answerSection input { font-size: 18px; padding: 5px; width: 70%; }
-#answerSection button { margin-left: 10px; font-size: 18px; }
+#answerSection button 
+{
+  width: 100%;
+  background: #7fbf7f; /* nežna zelena */
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
 
 #resultsTable { display: none; margin-top: 20px; border-collapse: collapse; width: 100%; font-size: 18px; }
 #resultsTable th, #resultsTable td { border: 1px solid #000; padding: 8px; text-align: left; }
+  #confettiContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 999;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  background-color: red;
+  opacity: 0.8;
+  animation: fall 2.5s linear forwards;
+}
+
+@keyframes fall {
+  from {
+    transform: translateY(-20px) rotate(0deg);
+  }
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
 </style>
 </head>
 <body>
 
-<h2>Kviz Skeniranja Artiklov</h2>
-<p>Klikni gumb, da zaženeš kamero in poskeniraš artikel.</p>
-<button id="startBtn">Zaženi kamero</button>
+<h2 class="welcome">
+  👑 Dobrodošla šefica!
+</h2>
+
+<p style="margin-bottom:16px; line-height:1.4;">
+  Preveri posamezne kartice artiklov in ustrezno zabeleži svoje odgovore!<br /><br />
+  <b>Pozor!</b><br />
+  Vsak nepravilen odgovor pomeni, da ostaneš brez tega izdelka
+  in ga moraš podariti nekomu od povabljenih!
+</p>
+
+<button id="startBtn">SKENIRAJ</button>
 
 <div id="counter" style="margin-top:10px; font-weight:bold;">
   0 / 10
@@ -58,5 +105,6 @@ button { padding: 10px 20px; font-size: 18px; margin-top: 10px; cursor: pointer;
 
 <script src="products.js"></script>
 <script src="app.js"></script>
+<div id="confettiContainer"></div>
 </body>
 </html>
