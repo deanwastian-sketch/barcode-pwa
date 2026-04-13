@@ -1,8 +1,3 @@
-// Če je že prijavljen
-if (localStorage.getItem("quiz_logged_in") === "1") {
-  window.location.href = "index.html";
-}
-
 document.getElementById("loginBtn").addEventListener("click", () => {
   window.open(
     "login_scanner.html",
@@ -16,8 +11,7 @@ window.addEventListener("message", (event) => {
   if (event.origin !== window.location.origin) return;
 
   if (event.data?.type === "login") {
-    localStorage.setItem("quiz_logged_in", "1");
-    localStorage.setItem("quiz_user", event.data.user);
+    // brez localStorage!
     window.location.href = "index.html";
   }
 });
