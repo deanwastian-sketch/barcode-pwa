@@ -1,22 +1,36 @@
+let locked = false;
+
 Quagga.init({
-    inputStream: {
-        type: "LiveStream",
-        target: document.getElementById("scanner"),
-        constraints: { facingMode: "environment" }
-    },
-    decoder: { readers: ["ean_reader","code_128_reader"] }
-}, function(err){
-    if(err){ alert("Napaka pri dostopu do kamere"); console.error(err); return; }
-    Quagga.start();
+  inputStream: {
+    type: "LiveStream",
+    target: document.getElementById("scanner"),
+    constraints: { facingMode: "environment" }
+  },
+  decoder: {
+    readers: ["ean_reader"]   // ✅ samo EAN, manj “napačnih” zadetkov
+  }
+}, function (err) {
+  if (err) {
+    alert("Napaka pri dostopu do kamere");
+    console.error(err);
+    return;
+  }
+  Quagga.start();
 });
 
-Quagga.onDetected(function(result){
-    const code = result.codeResult.code;
-    Quagga.stop();
+Quagga.onDetected(function (result) {
+  if (locked) return;
 
-    // Pošlji nazaj v glavni zavihek
-    if(window.opener){
-        window.opener.postMessage({barcode: code}, "*");
-    }
-    setTimeout(()=>{ window.close(); }, 300); // zapri zavihek po skeniranju
+  const code = (result?.codeResult?.code || "").trim();
+  if (!code) return;
+
+  locked = true;
+  Quagga.stop();
+
+  // Pošlji nazaj v glavni zavihek (varen origin)
+  if (window.opener) {
+    window.opener.postMessage({ type: "scan", barcode: code }, window.location.origin);
+  }
+
+  setTimeout(() => { window.close(); }, 200);
 });
