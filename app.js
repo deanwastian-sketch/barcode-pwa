@@ -61,6 +61,7 @@ function saveAnswer() {
 
   // KONEC PO 10 VNESENIH ODGOVORIH
   if (userAnswers.length >= MAX_ROUNDS) {
+    launchConfetti();
     showResults();
     // po želji: onemogoči nadaljnje skeniranje
     document.getElementById("startBtn").disabled = true;
@@ -142,3 +143,21 @@ function updateUIProgress() {
 }
 
 updateUIProgress();
+function launchConfetti() {
+  const container = document.getElementById("confettiContainer");
+  if (!container) return;
+
+  const colors = ["#f44336", "#ffeb3b", "#4caf50", "#2196f3", "#e91e63"];
+
+  for (let i = 0; i < 80; i++) {
+    const confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+    confetti.style.left = Math.random() * 100 + "vw";
+    confetti.style.backgroundColor =
+      colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.animationDelay = Math.random() + "s";
+    container.appendChild(confetti);
+
+    setTimeout(() => confetti.remove(), 3000);
+  }
+}
