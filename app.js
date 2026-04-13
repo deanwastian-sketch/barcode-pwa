@@ -116,6 +116,7 @@ window.addEventListener("message", function (event) {
   scannedArticles.push(code);
 
   showProductInfo(code);
+  playBeepSuccess();
 
   // gumb ostane disabled dokler uporabnik ne shrani odgovora
 });
@@ -177,6 +178,23 @@ function playBeepError() {
   oscillator.connect(audioCtx.destination);
   oscillator.start();
   oscillator.stop(audioCtx.currentTime + 0.3);
+}
+
+function playBeepSuccess() {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioCtx();
+  const oscillator = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime);
+  gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+
+  oscillator.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.12);
 }
 
 // Rezultati (vsi bodo znani, ker ne pustimo naprej brez products[barcode])
