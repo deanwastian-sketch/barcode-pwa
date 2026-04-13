@@ -221,4 +221,16 @@ function showResults() {
 }
 
 updateUIProgress();
-``
+
+function showToast(message, isError = true) {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+
+  toast.innerText = message;
+  toast.style.background = isError ? "#b71c1c" : "#2e7d32";
+  toast.style.display = "block";
+
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 2500);
+}
