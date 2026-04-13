@@ -1,5 +1,6 @@
 let locked = false;
 
+/* ✅ Potrditveni pisk ob uspešni prijavi */
 function playBeepSuccess() {
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   const audioCtx = new AudioCtx();
@@ -18,6 +19,20 @@ function playBeepSuccess() {
   oscillator.stop(audioCtx.currentTime + 0.12);
 }
 
+/* ✅ Zelen toast */
+function showSuccessToast(message) {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+
+  toast.innerText = message;
+  toast.style.display = "block";
+
+  setTimeout(function () {
+    toast.style.display = "none";
+  }, 2000);
+}
+
+/* ✅ Inicializacija Quagga – samo EAN */
 Quagga.init(
   {
     inputStream: {
@@ -39,25 +54,35 @@ Quagga.init(
   }
 );
 
+/* ✅ Ob uspešnem skenu prijavne EAN kode */
 Quagga.onDetected(function (result) {
   if (locked) return;
 
-  const code = result && result.codeResult && result.codeResult.code;
+  if (!result || !result.codeResult || !result.codeResult.code) return;
+
+  const code = result.codeResult.code.trim();
   if (!code) return;
 
   locked = true;
   Quagga.stop();
 
+  // ✅ UX feedback
   playBeepSuccess();
+  showSuccessToast("✅ Prijava uspešna");
 
+  // ✅ Pošlji prijavo nazaj v login.html
   if (window.opener) {
     window.opener.postMessage(
-      { type: "login", barcode: code },
+      {
+        type: "login",
+        barcode: code
+      },
       window.location.origin
     );
   }
 
+  // ✅ Zapri okno po kratkem zamiku
   setTimeout(function () {
     window.close();
-  }, 250);
+  }, 300);
 });
