@@ -1,6 +1,4 @@
-if (localStorage.getItem("quiz_logged_in") !== "1") {
-  window.location.href = "login.html";
-}
+
 const MAX_ROUNDS = 10;
 let scannedArticles = [];
 let userAnswers = [];
