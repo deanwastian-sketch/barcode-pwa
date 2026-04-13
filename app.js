@@ -190,8 +190,18 @@ function failScanAndRetry(message) {
 function showProductInfo(barcode) {
   const product = products[barcode];
 
-  document.getElementById("productName").innerText = product.name;
-  document.getElementById("productDesc").innerText = product.desc;
+  document.getElementById("productName").innerText = product.naziv;
+  document.getElementById("productDesc").innerText = product.opis;
+
+  document.getElementById("productSkladisce").innerText = product.skladisce;
+  document.getElementById("productZaloga").innerText = product.Zaloga;
+  document.getElementById("productNarocilo").innerText = product.Zadnje_narocilo;
+
+  // Namig – samo prek gumba
+  const hintBtn = document.getElementById("hintBtn");
+  hintBtn.onclick = function () {
+    showHint(product.Namig);
+  };
 
   document.getElementById("productInfo").style.display = "block";
   document.getElementById("answerSection").style.display = "block";
@@ -317,6 +327,16 @@ function showResults() {
 
   const table = document.getElementById("resultsTable");
   if (table) table.style.display = "table";
+}
+
+function showHint(text) {
+  if (!text) {
+    showToast("Namig za ta artikel ni na voljo.", true);
+    return;
+  }
+
+  // uporabi toast ali alert – tu je toast varianta
+  showToast("❓ Namig: " + text, false);
 }
 
 // init
