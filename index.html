@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="sl">
 <head>
+  <script>
+  // Če je index odprt direktno → vrni na login
+  if (document.referrer === "" || !document.referrer.includes("login")) {
+    window.location.href = "login.html";
+  }
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Skeniranje artiklov</title>
