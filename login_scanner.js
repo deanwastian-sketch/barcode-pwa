@@ -67,6 +67,5 @@ Quagga.onDetected(function (result) {
     window.close();
   }, 250);
 });
-``
 function playBeepSuccess() {
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
