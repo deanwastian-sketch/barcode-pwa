@@ -40,7 +40,7 @@ const products = {
     Namig: "Vročine se ne bojim"
   },
   "2002051976059": {
-    naziv: "Artikel 5 - praline Lindt",
+    naziv: "Artikel 5",
     opis: "One točno vedo kaj pomeni sreča in zadovoljstvo. Rok trajanja: nekaj ur do max 2 dni",
 
     skladisce: "Spalnica",
@@ -50,7 +50,7 @@ const products = {
     Namig: "Kroglice sreče"
   },
   "2002051976066": {
-    naziv: "Artikel 6 - plinski gorilec",
+    naziv: "Artikel 6",
     opis: "Prav ti pridem v vseh letnih časih. Čeprav naju včasih heca, nama na koncu vedno uspe. Rok trajanja: kakšen mesec ali dva",
 
     skladisce: "Terasa",
@@ -60,7 +60,7 @@ const products = {
     Namig: "Ena tvojih ljubših igrač"
   },
   "2002051976073": {
-    naziv: "Artikel 7 - čigumiji",
+    naziv: "Artikel 7",
     opis: "Vedno pri roki. V predalu, v avtu, v torbici. Rok trajanja: 1 mesec",
 
     skladisce: "avto",
@@ -70,7 +70,7 @@ const products = {
     Namig: "Izjemno sveže"
   },
   "2002051976080": {
-    naziv: "Artikel 8 - antistresna žogica",
+    naziv: "Artikel 8",
     opis: "Čutim tvojo energijo in ti jo pomagam usmerit v pravo smer. Manjša kot tvoja dlan, pa vendar večja od vseh tvojih skrbi. Rok trajanja: neomejeno",
 
     skladisce: "Pisarna",
