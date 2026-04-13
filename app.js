@@ -245,12 +245,32 @@ function saveAnswer() {
 
   // konec po 10 odgovorih
   if (userAnswers.length >= MAX_ROUNDS) {
-    launchConfetti();               // 🎉 konfeti
-    showToast("🎉 Kviz zaključen!", false); // opcijsko zelen toast (če imaš #toast)
-    showResults();
-    document.getElementById("startBtn").disabled = true;
-    return;
-  }
+
+  // 🎉 efekti
+  launchConfetti();
+  showToast("🎉 Kviz zaključen!", false);
+
+  // ❌ skrij začetne elemente
+  const hideIds = [
+    "welcomeTitle",
+    "introText",
+    "startBtn",
+    "counterContainer"
+  ];
+  hideIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+
+  // ✅ pokaži zaključno sporočilo
+  const finish = document.getElementById("finishMessage");
+  if (finish) finish.style.display = "block";
+
+  // ✅ pokaži rezultate
+  showResults();
+
+  return;
+}
 
   // omogoči nov sken
   document.getElementById("startBtn").disabled = false;
