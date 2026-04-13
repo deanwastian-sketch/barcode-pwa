@@ -57,8 +57,8 @@ document.getElementById("startBtn").addEventListener("click", () => {
 function failScanAndRetry(message) {
   playBeepError();
 
-  alert(message);
-
+  showToast(message, true);
+  
   // skrij kartice/odgovor (če bi se slučajno kaj pokazalo)
   document.getElementById("productInfo").style.display = "none";
   document.getElementById("answerSection").style.display = "none";
