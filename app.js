@@ -168,7 +168,7 @@ function showFinishView() {
 
 function failScanAndRetry(message) {
   playBeepError();
-  showToast(message, true);
+  showPersistentError(message);
 
   // skrij kartice/odgovor
   const pi = document.getElementById("productInfo");
@@ -337,6 +337,21 @@ function showHint(text) {
 
   // uporabi toast ali alert – tu je toast varianta
   showToast("❓ Namig: " + text, false);
+}
+
+function showPersistentError(message) {
+  const overlay = document.getElementById("errorOverlay");
+  const text = document.getElementById("errorText");
+  const closeBtn = document.getElementById("closeErrorBtn");
+
+  if (!overlay || !text || !closeBtn) return;
+
+  text.innerText = message;
+  overlay.style.display = "flex";
+
+  closeBtn.onclick = function () {
+    overlay.style.display = "none";
+  };
 }
 
 // init
