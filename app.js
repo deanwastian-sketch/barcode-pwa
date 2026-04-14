@@ -181,10 +181,7 @@ function failScanAndRetry(message) {
 
   currentBarcode = "";
 
-  // ponovno odpri kamero
-  setTimeout(function () {
-    openScanner();
-  }, 250);
+  // ⛔ kamera se NE odpira tukaj več
 }
 
 function showProductInfo(barcode) {
@@ -350,9 +347,11 @@ function showPersistentError(message) {
   overlay.style.display = "flex";
 
   closeBtn.onclick = function () {
-    overlay.style.display = "none";
-  };
-}
+  overlay.style.display = "none";
+
+  // ✅ šele zdaj ponovno odpri kamero
+  openScanner();
+};
 
 // init
 updateUIProgress();
