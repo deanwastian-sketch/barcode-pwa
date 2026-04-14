@@ -365,6 +365,10 @@ function resetErrorButtons() {
   cancelBtn.style.display = "block";
   ticketBtn.style.display = "block";
 }
+document.addEventListener("DOMContentLoaded", function () {
+  const overlay = document.getElementById("errorOverlay");
+  if (overlay) overlay.style.display = "none";
+});
 
 // init
 updateUIProgress();
