@@ -353,6 +353,7 @@ function showPersistentError(message) {
   // ✅ šele zdaj ponovno odpri kamero
   openScanner();
 };
+}
 
 // init
 updateUIProgress();
