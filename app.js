@@ -226,17 +226,17 @@ window.addEventListener("message", function (event) {
 
   // 1) EAN mora biti validen (checksum)
   if (!isValidEAN13(code)) {
-    return failScanAndRetry("❌ Koda ni bila pravilno prebrana. Prosim poskusi znova poskenirati isti artikel.");
+    return failScanAndRetry("❌ Ejej, napaka! Probaj še enkrat 🤣 Če ne bo šlo pa napiši ticket.");
   }
 
   // 2) Koda mora obstajati v bazi
   if (!products[code]) {
-    return failScanAndRetry("❌ Artikel ni prepoznan (ni v bazi). Prosim poskusi znova poskenirati isti artikel.");
+    return failScanAndRetry("❌ Ejej, napaka! Probaj še enkrat 🤣 Če ne bo šlo pa napiši ticket.");
   }
 
   // 3) Ne dovolimo duplikatov
   if (scannedArticles.indexOf(code) !== -1) {
-    return failScanAndRetry("⚠️ Ta artikel je bil že poskeniran. Prosim poskusi znova poskenirati drug artikel.");
+    return failScanAndRetry("⚠️ Veš kaj! Ta artikel si pa že poskenirala in ugibala! Kar daj naslednjega.");
   }
 
   // ✅ OK – sprejmemo sken
