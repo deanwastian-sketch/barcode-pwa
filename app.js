@@ -180,7 +180,8 @@ function failScanAndRetry(message) {
   if (ua) ua.value = "";
 
   currentBarcode = "";
-
+  const btn = document.getElementById("startBtn");
+  if (btn) btn.disabled = false;
   // ⛔ kamera se NE odpira tukaj več
 }
 
