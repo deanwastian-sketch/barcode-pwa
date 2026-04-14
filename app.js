@@ -338,9 +338,10 @@ function showHint(text) {
 }
 
 function showPersistentError(message) {
+  if (!message) return; // ✅ prepreči prazen overlay
+
   const overlay = document.getElementById("errorOverlay");
   const text = document.getElementById("errorText");
-
   const retryBtn = document.getElementById("retryScanBtn");
   const cancelBtn = document.getElementById("cancelScanBtn");
   const ticketBtn = document.getElementById("ticketScanBtn");
@@ -350,44 +351,9 @@ function showPersistentError(message) {
   text.innerText = message;
   overlay.style.display = "flex";
 
-  // 1️⃣ POSKUSI PONOVNO
-  retryBtn.onclick = function () {
-    overlay.style.display = "none";
-    openScanner();
-  };
-
-  // 2️⃣ PREKLIČI
-  cancelBtn.onclick = function () {
-    text.innerText =
-      "Ah daj no, menda ne boš zdaj odnehala! Gremo naprej!";
-
-    retryBtn.innerText = "OK";
-    cancelBtn.style.display = "none";
-    ticketBtn.style.display = "none";
-
-    retryBtn.onclick = function () {
-      overlay.style.display = "none";
-      resetErrorButtons();
-      openScanner();
-    };
-  };
-
-  // 3️⃣ TICKET
-  ticketBtn.onclick = function () {
-    text.innerText =
-      "Kaj ti misliš da si v službi? Kar probaj še enkrat!";
-
-    retryBtn.innerText = "OK";
-    cancelBtn.style.display = "none";
-    ticketBtn.style.display = "none";
-
-    retryBtn.onclick = function () {
-      overlay.style.display = "none";
-      resetErrorButtons();
-      openScanner();
-    };
-  };
+  // gumbi se nastavijo kasneje (kot smo že planirali)
 }
+
 function resetErrorButtons() {
   const retryBtn = document.getElementById("retryScanBtn");
   const cancelBtn = document.getElementById("cancelScanBtn");
