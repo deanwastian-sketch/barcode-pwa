@@ -338,22 +338,59 @@ function showHint(text) {
 }
 
 function showPersistentError(message) {
-  if (!message) return; // ✅ prepreči prazen overlay
+  if (!message) return;
 
   const overlay = document.getElementById("errorOverlay");
   const text = document.getElementById("errorText");
+
   const retryBtn = document.getElementById("retryScanBtn");
   const cancelBtn = document.getElementById("cancelScanBtn");
   const ticketBtn = document.getElementById("ticketScanBtn");
 
   if (!overlay || !text || !retryBtn || !cancelBtn || !ticketBtn) return;
 
+  // reset gumbov
+  retryBtn.innerText = "POSKUSI PONOVNO";
+  cancelBtn.style.display = "block";
+  ticketBtn.style.display = "block";
+
   text.innerText = message;
   overlay.style.display = "flex";
 
-  // gumbi se nastavijo kasneje (kot smo že planirali)
-}
+  // 1️⃣ POSKUSI PONOVNO
+  retryBtn.onclick = function () {
+    overlay.style.display = "none";
+    openScanner();
+  };
 
+  // 2️⃣ PREKLIČI
+  cancelBtn.onclick = function () {
+    text.innerText = "Ah daj no, menda ne boš zdaj odnehala! Gremo naprej!";
+
+    retryBtn.innerText = "OK";
+    cancelBtn.style.display = "none";
+    ticketBtn.style.display = "none";
+
+    retryBtn.onclick = function () {
+      overlay.style.display = "none";
+      openScanner();
+    };
+  };
+
+  // 3️⃣ TICKET
+  ticketBtn.onclick = function () {
+    text.innerText = "Kaj ti misliš da si v službi? Kar probaj še enkrat!";
+
+    retryBtn.innerText = "OK";
+    cancelBtn.style.display = "none";
+    ticketBtn.style.display = "none";
+
+    retryBtn.onclick = function () {
+      overlay.style.display = "none";
+      openScanner();
+    };
+  };
+}
 function resetErrorButtons() {
   const retryBtn = document.getElementById("retryScanBtn");
   const cancelBtn = document.getElementById("cancelScanBtn");
