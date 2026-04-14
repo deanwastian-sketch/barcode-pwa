@@ -340,19 +340,64 @@ function showHint(text) {
 function showPersistentError(message) {
   const overlay = document.getElementById("errorOverlay");
   const text = document.getElementById("errorText");
-  const closeBtn = document.getElementById("closeErrorBtn");
 
-  if (!overlay || !text || !closeBtn) return;
+  const retryBtn = document.getElementById("retryScanBtn");
+  const cancelBtn = document.getElementById("cancelScanBtn");
+  const ticketBtn = document.getElementById("ticketScanBtn");
+
+  if (!overlay || !text || !retryBtn || !cancelBtn || !ticketBtn) return;
 
   text.innerText = message;
   overlay.style.display = "flex";
 
-  closeBtn.onclick = function () {
-  overlay.style.display = "none";
+  // 1️⃣ POSKUSI PONOVNO
+  retryBtn.onclick = function () {
+    overlay.style.display = "none";
+    openScanner();
+  };
 
-  // ✅ šele zdaj ponovno odpri kamero
-  openScanner();
-};
+  // 2️⃣ PREKLIČI
+  cancelBtn.onclick = function () {
+    text.innerText =
+      "Ah daj no, menda ne boš zdaj odnehala! Gremo naprej!";
+
+    retryBtn.innerText = "OK";
+    cancelBtn.style.display = "none";
+    ticketBtn.style.display = "none";
+
+    retryBtn.onclick = function () {
+      overlay.style.display = "none";
+      resetErrorButtons();
+      openScanner();
+    };
+  };
+
+  // 3️⃣ TICKET
+  ticketBtn.onclick = function () {
+    text.innerText =
+      "Kaj ti misliš da si v službi? Kar probaj še enkrat!";
+
+    retryBtn.innerText = "OK";
+    cancelBtn.style.display = "none";
+    ticketBtn.style.display = "none";
+
+    retryBtn.onclick = function () {
+      overlay.style.display = "none";
+      resetErrorButtons();
+      openScanner();
+    };
+  };
+}
+function resetErrorButtons() {
+  const retryBtn = document.getElementById("retryScanBtn");
+  const cancelBtn = document.getElementById("cancelScanBtn");
+  const ticketBtn = document.getElementById("ticketScanBtn");
+
+  if (!retryBtn || !cancelBtn || !ticketBtn) return;
+
+  retryBtn.innerText = "POSKUSI PONOVNO";
+  cancelBtn.style.display = "block";
+  ticketBtn.style.display = "block";
 }
 
 // init
